@@ -7,11 +7,26 @@ const config: Config = {
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
+    fontFamily: {
+      barlow: ["Barlow Condensed"],
+      bellefair: ["Bellefair"],
+      lato: ["Lato"],
+      primary: "Orbitron",
+      secondary: "Rajdhani",
+      tertiary: "Aldrich",
+    },
     extend: {
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+      },
+      colors: {
+        primaryColor: "#01974B",
+        primaryColorVar: "#4db681",
+        secondaryColor: "#F5E6CD",
+        secondaryColorVar: "#f7ebd7",
+        viaColor: '#FDFBF8'
       },
     },
   },
