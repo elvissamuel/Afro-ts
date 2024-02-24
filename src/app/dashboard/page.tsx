@@ -56,7 +56,7 @@ let queryCall: QueryFunction;
         data.search_word = searchValue;
       }
   
-      const encryptedData = encryptData({data, secretKey: "ticker2020@1234#"});
+      const encryptedData = encryptData({data, secretKey: process.env.NEXT_PUBLIC_AFROMARKETS_SECRET_KEY});
   
       const result = await apiCall(encryptedData);
   

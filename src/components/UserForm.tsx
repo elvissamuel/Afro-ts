@@ -17,7 +17,7 @@ const UserForm = (props: UserFormProps) => {
   const router = useRouter()
 
   const onSubmit:  SubmitHandler<UserFormValues> = (data) => {
-    const encryptedInfo = encryptData({data, secretKey: "ticker2020@1234#"})
+    const encryptedInfo = encryptData({data, secretKey: process.env.NEXT_PUBLIC_AFROMARKETS_SECRET_KEY})
     window.localStorage.setItem('Afro_Email', data.email)
     console.log('encry: ',encryptedInfo)
     registerUser({encryptedInfo, setLoading, reset, router, toast})  

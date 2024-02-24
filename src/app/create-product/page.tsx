@@ -37,7 +37,7 @@ const CeateProduct = (props: Props) => {
         const fee_bearer = isBusiness ? 'business' : 'customer'
         const data = {product_name: productName, product_description: productDescription, product_category: productCategory, product_fee_bearer: fee_bearer, product_image: imgUrl, product_price: productPrice, product_quantity: productQuantity, authorization: dataAuth}
         console.log('new product sent: ', data)
-        const encryptedInfo = encryptData({data, secretKey: "ticker2020@1234#"})
+        const encryptedInfo = encryptData({data, secretKey: process.env.NEXT_PUBLIC_AFROMARKETS_SECRET_KEY})
         console.log('encry: ',encryptedInfo)
         createNewProduct({encryptedInfo, setLoading, toast})
 

@@ -21,7 +21,7 @@ const ResetPassword = (props: Props) => {
 
   const onSubmit: SubmitHandler<ResetPasswordFormValues> = (data) => {
     const myData = {email: window.localStorage.getItem('Afro_Email'), password: data.password}
-    const encryptedInfo = encryptData({data:myData, secretKey: "ticker2020@1234#"})
+    const encryptedInfo = encryptData({data:myData, secretKey: process.env.NEXT_PUBLIC_AFROMARKETS_SECRET_KEY})
     console.log('encry: ',encryptedInfo)
     handlePasswordReset({data:encryptedInfo, setLoading, reset, router, toast})  
   }

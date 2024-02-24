@@ -19,7 +19,7 @@ const ForgotPassword = (props: Props) => {
 
   const onSubmit: SubmitHandler<VerifyEmailFormValues>  = (data) => {
     window.localStorage.setItem('Afro_Email', data.email)
-    const encryptedInfo = encryptData({data, secretKey: "ticker2020@1234#"})
+    const encryptedInfo = encryptData({data, secretKey: process.env.NEXT_PUBLIC_AFROMARKETS_SECRET_KEY})
     console.log('encry: ',encryptedInfo)
     handleVerifyEmail({data:encryptedInfo, setLoading, router, toast})  
   }

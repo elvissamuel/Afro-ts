@@ -25,7 +25,7 @@ export default function Login() {
   const {setIpAddress, setLoginAuth, setIsBusiness, setKycVerified, loginAuth} = contextValues
 
   const onSubmit: SubmitHandler<LoginFormValues> = (data) => {
-    const encryptedInfo = encryptData({data, secretKey: "ticker2020@1234#"})
+    const encryptedInfo = encryptData({data, secretKey: process.env.NEXT_PUBLIC_AFROMARKETS_SECRET_KEY})
     console.log('encry: ',encryptedInfo)
     handleLogin({encryptedInfo, setLoading, reset, router, setLoginAuth, setIsBusiness, setKycVerified, toast})  
   }

@@ -9,7 +9,7 @@ export const registerEmail = (params: FRegisterEmailProps) => {
   params.setLoading(true)
   axios
     .post(
-      "https://afromarketsquare-0170213566bc.herokuapp.com/user/subscribe",
+      process.env.NEXT_PUBLIC_AFROMARKETS_URL + "/user/subscribe",
       params.obj,
     )
     .then((response) => {
@@ -41,16 +41,16 @@ export const registerEmail = (params: FRegisterEmailProps) => {
 
 export const registerUser = (params: FRegisterUserProps) => {
   const headers = {
-    'auth_param': 'e8f24a9d0c731b5f', 
+    'auth_param': process.env.NEXT_PUBLIC_AFROMARKETS_AUTH_PARAMS, 
     'Content-Type': 'text/plain'
   }
   
   params.setLoading(true)
-  axios.post("https://afromarketsquare-0170213566bc.herokuapp.com/user/onboarding", params.encryptedInfo, {headers}
+  axios.post(process.env.NEXT_PUBLIC_AFROMARKETS_URL + "/user/onboarding", params.encryptedInfo, {headers}
     )
   .then((res) =>{
     if(res){
-    const myData = decryptAES(res.data, 'ticker2020@1234#').then((myres) => {
+    const myData = decryptAES(res.data, process.env.NEXT_PUBLIC_AFROMARKETS_SECRET_KEY).then((myres) => {
       const response = JSON.parse(myres!)
       if(res.status === 200) {
       params.toast.success('Registration was successful, check your email for verification code')
@@ -65,7 +65,7 @@ export const registerUser = (params: FRegisterUserProps) => {
     }
   })
   .catch((err) => {
-    const myData = decryptAES(err.response.data, 'ticker2020@1234#').then((myres) => {
+    const myData = decryptAES(err.response.data, process.env.NEXT_PUBLIC_AFROMARKETS_SECRET_KEY).then((myres) => {
       const response = JSON.parse(myres!)
       console.log('err res: ', response)
       if(response.message.includes('Email exists')) {
@@ -85,16 +85,16 @@ export const registerUser = (params: FRegisterUserProps) => {
 
 export const handlePasswordReset = (params: FResetPasswordProps) => {
   const headers = {
-    'auth_param': 'e8f24a9d0c731b5f', 
+    'auth_param': process.env.NEXT_PUBLIC_AFROMARKETS_AUTH_PARAMS, 
     'Content-Type': 'text/plain'
   }
   
   params.setLoading(true)
-  axios.post("https://afromarketsquare-0170213566bc.herokuapp.com/user/resetPassword", params.data, {headers}
+  axios.post(process.env.NEXT_PUBLIC_AFROMARKETS_URL + "/user/resetPassword", params.data, {headers}
     )
   .then((res) =>{
     if(res.data){
-    const myData = decryptAES(res.data, 'ticker2020@1234#').then((myres) => {
+    const myData = decryptAES(res.data, process.env.NEXT_PUBLIC_AFROMARKETS_SECRET_KEY).then((myres) => {
       const response = JSON.parse(myres!)
       console.log('dres-auth:', response )
       
@@ -119,16 +119,16 @@ export const handlePasswordReset = (params: FResetPasswordProps) => {
 
 export const handleLogin = (params:FLoginProps) => {
   const headers = {
-    'auth_param': 'e8f24a9d0c731b5f', 
+    'auth_param': process.env.NEXT_PUBLIC_AFROMARKETS_AUTH_PARAMS, 
     'Content-Type': 'text/plain'
   }
   
   params.setLoading(true)
-  axios.post<string>("https://afromarketsquare-0170213566bc.herokuapp.com/user/login", params.encryptedInfo, {headers}
+  axios.post<string>(process.env.NEXT_PUBLIC_AFROMARKETS_URL + "/user/login", params.encryptedInfo, {headers}
     )
   .then((res: AxiosResponse<string>) =>{
     if(res.data){
-    const myData = decryptAES(res.data, 'ticker2020@1234#').then((myres) => {
+    const myData = decryptAES(res.data, process.env.NEXT_PUBLIC_AFROMARKETS_SECRET_KEY).then((myres) => {
       const response = JSON.parse(myres!)
       const cart = response.responseBody.cartResponse
       console.log('dres-auth:', response )
@@ -155,7 +155,7 @@ export const handleLogin = (params:FLoginProps) => {
     }
   })
   .catch((err) => {
-    const myData = decryptAES(err.response.data, 'ticker2020@1234#').then((myres) => {
+    const myData = decryptAES(err.response.data, process.env.NEXT_PUBLIC_AFROMARKETS_SECRET_KEY).then((myres) => {
       console.log('user-form-err: ', JSON.parse(myres!))
 
     }).catch((err) => {console.log('real err: ', err)})
@@ -171,15 +171,15 @@ export const handleLogin = (params:FLoginProps) => {
 
 export const handleEmailVerification = (params: FEmailVerificationProps) => {
   const headers = {
-    'auth_param': 'e8f24a9d0c731b5f', 
+    'auth_param': process.env.NEXT_PUBLIC_AFROMARKETS_AUTH_PARAMS, 
     'Content-Type': 'text/plain'
   }
   params.setLoading(true)
-  axios.post("https://afromarketsquare-0170213566bc.herokuapp.com/user/verifyEmail", params.encryptedInfo, {headers}
+  axios.post(process.env.NEXT_PUBLIC_AFROMARKETS_URL + "/user/verifyEmail", params.encryptedInfo, {headers}
     )
   .then((res) =>{
     if(res.data){
-    const myData = decryptAES(res.data, 'ticker2020@1234#').then((myres) => {
+    const myData = decryptAES(res.data, process.env.NEXT_PUBLIC_AFROMARKETS_SECRET_KEY).then((myres) => {
       const response = JSON.parse(myres!)
       console.log('Derypted response veri: ', response.responseBody)
       window.localStorage.setItem('Afro_User_Email', response.responseBody.email)
@@ -209,15 +209,15 @@ export const handleEmailVerification = (params: FEmailVerificationProps) => {
 
 export const handleVerifyEmail = (params: FVerifyEmailProps) => {
   const headers = {
-    'auth_param': 'e8f24a9d0c731b5f', 
+    'auth_param': process.env.NEXT_PUBLIC_AFROMARKETS_AUTH_PARAMS, 
     'Content-Type': 'text/plain'
   }
   params.setLoading(true)
-  axios.post("https://afromarketsquare-0170213566bc.herokuapp.com/user/requestVerification", params.data, {headers}
+  axios.post(process.env.NEXT_PUBLIC_AFROMARKETS_URL + "/user/requestVerification", params.data, {headers}
     )
   .then((res) =>{
     if(res.data){
-    const myData = decryptAES(res.data, 'ticker2020@1234#').then((myres) => {
+    const myData = decryptAES(res.data, process.env.NEXT_PUBLIC_AFROMARKETS_SECRET_KEY).then((myres) => {
       const response = JSON.parse(myres!)
       console.log('Derypted response veri: ', response.responseBody)
       if(res.status === 200) {
@@ -244,11 +244,11 @@ export const registerBusiness = (params: FRegisterBusinessProps) => {
     'Content-Type': 'text/plain'
   }
   params.setLoading(true)
-  axios.post("https://afromarketsquare-0170213566bc.herokuapp.com/merchant/onboarding", params.encryptedInfo, {headers}
+  axios.post(process.env.NEXT_PUBLIC_AFROMARKETS_URL + "/merchant/onboarding", params.encryptedInfo, {headers}
     )
   .then((res) =>{
     if(res.data){
-    const myData = decryptAES(res.data, 'ticker2020@1234#').then((myres) => {
+    const myData = decryptAES(res.data, process.env.NEXT_PUBLIC_AFROMARKETS_SECRET_KEY).then((myres) => {
       const response = JSON.parse(myres!)
       console.log('Full res: ', res)
       console.log('bus reg: ', response)
@@ -265,7 +265,7 @@ export const registerBusiness = (params: FRegisterBusinessProps) => {
   })
   .catch((err) => {
     console.log('user-form-err: ', err)
-    const myData = decryptAES(err.response.data, 'ticker2020@1234#').then((myres) => {
+    const myData = decryptAES(err.response.data, process.env.NEXT_PUBLIC_AFROMARKETS_SECRET_KEY).then((myres) => {
       const response = JSON.parse(myres!)
       if(response.message.includes('Email exists')) {
       params.toast.error('Email exists, login in to your account')
@@ -284,14 +284,14 @@ export const registerBusiness = (params: FRegisterBusinessProps) => {
 export const getAllBuisnessProducts = async (data:string) => {
   try {
     const headers = {
-      'auth_param': 'e8f24a9d0c731b5f',
+      'auth_param': process.env.NEXT_PUBLIC_AFROMARKETS_AUTH_PARAMS,
       'Content-Type': 'text/plain'
     };
 
-    const response = await axios.post("https://afromarketsquare-0170213566bc.herokuapp.com/product/fetchProducts", data, { headers });
+    const response = await axios.post(process.env.NEXT_PUBLIC_AFROMARKETS_URL + "/product/fetchProducts", data, { headers });
 
     if (response.data) {
-      const myData = await decryptAES(response.data, 'ticker2020@1234#');
+      const myData = await decryptAES(response.data, process.env.NEXT_PUBLIC_AFROMARKETS_SECRET_KEY);
       console.log('This is all items from api: ', myData)
       const parsedData = JSON.parse(myData!);
       console.log('Decrypted Data:', parsedData.responseBody);
@@ -309,14 +309,14 @@ export const getAllBuisnessProducts = async (data:string) => {
 export const getAllItems = async (data:string) => {
   try {
     const headers = {
-      'auth_param': 'e8f24a9d0c731b5f',
+      'auth_param': process.env.NEXT_PUBLIC_AFROMARKETS_AUTH_PARAMS,
       'Content-Type': 'text/plain'
     };
 
-    const response = await axios.post("https://afromarketsquare-0170213566bc.herokuapp.com/product/fetchAllProducts", data, { headers });
+    const response = await axios.post(process.env.NEXT_PUBLIC_AFROMARKETS_URL + "/product/fetchAllProducts", data, { headers });
 
     if (response.data) {
-      const myData = await decryptAES(response.data, 'ticker2020@1234#');
+      const myData = await decryptAES(response.data, process.env.NEXT_PUBLIC_AFROMARKETS_SECRET_KEY);
       // console.log('This is all items from api: ', myData)
       const parsedData = JSON.parse(myData!);
       console.log('Decrypted Data:', parsedData.responseBody);
@@ -357,15 +357,15 @@ export const getAllItems = async (data:string) => {
 
 export const createCart = (params: FCreateCartProps) => {
   const headers = {
-    'auth_param': 'e8f24a9d0c731b5f', 
+    'auth_param': process.env.NEXT_PUBLIC_AFROMARKETS_AUTH_PARAMS, 
     'Content-Type': 'text/plain'
   }
   params.setLoading(true)
-  axios.post("https://afromarketsquare-0170213566bc.herokuapp.com/cart/createCart", params.encryptedInfo, {headers}
+  axios.post(process.env.NEXT_PUBLIC_AFROMARKETS_URL + "/cart/createCart", params.encryptedInfo, {headers}
     )
   .then((res) =>{
     if(res.data){
-    const myData = decryptAES(res.data, 'ticker2020@1234#').then((myres) => {
+    const myData = decryptAES(res.data, process.env.NEXT_PUBLIC_AFROMARKETS_SECRET_KEY).then((myres) => {
       const response = JSON.parse(myres!)
       console.log('bus reg: ', response)
       params.setCount(1)
@@ -391,15 +391,15 @@ export const createCart = (params: FCreateCartProps) => {
 
 export const addToCart = (params: FCreateCartProps) => {
   const headers = {
-    'auth_param': 'e8f24a9d0c731b5f', 
+    'auth_param': process.env.NEXT_PUBLIC_AFROMARKETS_AUTH_PARAMS, 
     'Content-Type': 'text/plain'
   }
   params.setLoading(true)
-  axios.post("https://afromarketsquare-0170213566bc.herokuapp.com/cart/addItemToCart", params.encryptedInfo, {headers}
+  axios.post(process.env.NEXT_PUBLIC_AFROMARKETS_URL + "/cart/addItemToCart", params.encryptedInfo, {headers}
     )
   .then((res) =>{
     if(res.data){
-    const myData = decryptAES(res.data, 'ticker2020@1234#').then((myres) => {
+    const myData = decryptAES(res.data, process.env.NEXT_PUBLIC_AFROMARKETS_SECRET_KEY).then((myres) => {
       const response = JSON.parse(myres!)
       console.log('bus reg: ', response)
       params.setCount(1)
@@ -425,15 +425,15 @@ export const addToCart = (params: FCreateCartProps) => {
 
 export const removeFromCart = (params: FRemoveFromCartProps) => {
   const headers = {
-    'auth_param':'e8f24a9d0c731b5f', 
+    'auth_param':process.env.NEXT_PUBLIC_AFROMARKETS_AUTH_PARAMS, 
     'Content-Type': 'text/plain'
   }
   params.setLoading(true)
-  axios.post("https://afromarketsquare-0170213566bc.herokuapp.com/cart/removeItemFromCart", params.encryptedInfo, {headers}
+  axios.post(process.env.NEXT_PUBLIC_AFROMARKETS_URL + "/cart/removeItemFromCart", params.encryptedInfo, {headers}
     )
   .then((res) =>{
     if(res.data){
-    const myData = decryptAES(res.data, 'ticker2020@1234#').then((myres) => {
+    const myData = decryptAES(res.data, process.env.NEXT_PUBLIC_AFROMARKETS_SECRET_KEY).then((myres) => {
       const response = JSON.parse(myres!)
       console.log('bus reg: ', response)
       localStorage.setItem('Afro_Cart_Orders', JSON.stringify(response.responseBody.orders))
@@ -458,14 +458,14 @@ export const removeFromCart = (params: FRemoveFromCartProps) => {
 export const getAllOrders = async (data:string) => {
   try {
     const headers = {
-      'auth_param': 'e8f24a9d0c731b5f',
+      'auth_param': process.env.NEXT_PUBLIC_AFROMARKETS_AUTH_PARAMS,
       'Content-Type': 'text/plain'
     };
 
-    const response = await axios.post("https://afromarketsquare-0170213566bc.herokuapp.com/cart/fetchUserCart", data, { headers });
+    const response = await axios.post(process.env.NEXT_PUBLIC_AFROMARKETS_URL + "/cart/fetchUserCart", data, { headers });
 
     if (response.data) {
-      const myData = await decryptAES(response.data, 'ticker2020@1234#');
+      const myData = await decryptAES(response.data, process.env.NEXT_PUBLIC_AFROMARKETS_SECRET_KEY);
       const parsedData = JSON.parse(myData!);
       window.localStorage.setItem('My_Afro_Orders', JSON.stringify(parsedData.responseBody))
       return parsedData.responseBody.orders;
@@ -493,15 +493,15 @@ export const getImageUrl = (params: FGetImageProps)=>{
 
 export const createNewProduct = (params: FCreateProductProps) => {
   const headers = {
-    'auth_param': 'e8f24a9d0c731b5f', 
+    'auth_param': process.env.NEXT_PUBLIC_AFROMARKETS_AUTH_PARAMS, 
     'Content-Type': 'text/plain'
   }
   params.setLoading(true)
-  axios.post("https://afromarketsquare-0170213566bc.herokuapp.com/product/listProduct", params.encryptedInfo, {headers}
+  axios.post(process.env.NEXT_PUBLIC_AFROMARKETS_URL + "/product/listProduct", params.encryptedInfo, {headers}
     )
   .then((res) =>{
     if(res.data){
-    const myData = decryptAES(res.data, 'ticker2020@1234#').then((myres) => {
+    const myData = decryptAES(res.data, process.env.NEXT_PUBLIC_AFROMARKETS_SECRET_KEY).then((myres) => {
       const response = JSON.parse(myres!)
       console.log('new product details: ', response)
       if(res.status === 200) {
@@ -522,11 +522,11 @@ export const createNewProduct = (params: FCreateProductProps) => {
 }
 
 export const getCategories = (setCategories: React.Dispatch<React.SetStateAction<CategoryProps[]>>) => {
-  axios.get('https://afromarketsquare-0170213566bc.herokuapp.com/app/categories')
+  axios.get(process.env.NEXT_PUBLIC_AFROMARKETS_URL + "/app/categories")
             .then((res) => {
               console.log('cat log:', res)
               if(res.data){
-                const myData = decryptAES(res.data, 'ticker2020@1234#').then((myres) => {
+                const myData = decryptAES(res.data, process.env.NEXT_PUBLIC_AFROMARKETS_SECRET_KEY).then((myres) => {
                   const response = JSON.parse(myres!)
                   console.log('categories: ', response)
                   setCategories(response)
@@ -549,10 +549,10 @@ export const handleCheckout = (params: FCheckoutProps) => {
 
   params.setLoading(true);
 
-  return axios.post(process.env.REACT_APP_AFROMARKETS_URL + "/order/checkout", params.data, { headers })
+  return axios.post(process.env.NEXT_PUBLIC_AFROMARKETS_URL + "/order/checkout", params.data, { headers })
     .then((res) => {
       if (res.data) {
-        return decryptAES(res.data, process.env.REACT_APP_AFROMARKETS_SECRET_KEY)
+        return decryptAES(res.data, process.env.NEXT_PUBLIC_AFROMARKETS_SECRET_KEY)
           .then((myres) => {
             const response = JSON.parse(myres!);
             const checkoutUrl = response.responseBody.stripeResponse;

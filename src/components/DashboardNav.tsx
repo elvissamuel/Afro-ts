@@ -49,7 +49,7 @@ const DashboardNav = (props: Props) => {
     const cartRef = JSON.parse(afroCartReference)
     const dataIP = localStorage.getItem('ip_address') ?? ''
     const data = {authorization: dataAuth, ip_address: JSON.parse(dataIP), cart_reference: cartRef}
-    const encryptedData = encryptData({data, secretKey:"ticker2020@1234#"})
+    const encryptedData = encryptData({data, secretKey:process.env.NEXT_PUBLIC_AFROMARKETS_SECRET_KEY})
   
     const {data: allOrder, isSuccess, } = useQuery({
       queryKey: ['All_Afro_Orders'],

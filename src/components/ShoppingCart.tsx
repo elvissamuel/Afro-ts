@@ -24,7 +24,7 @@ const ShoppingCart = (props: Props) => {
     try {
         const data = {authorization: dataAuth, cart_reference: cartRef, product_id: id};
         console.log('sent data: ', data);
-        const encryptedInfo = encryptData({data, secretKey: "ticker2020@1234#"});
+        const encryptedInfo = encryptData({data, secretKey: process.env.NEXT_PUBLIC_AFROMARKETS_SECRET_KEY});
         return removeFromCart({encryptedInfo, setLoading, toast});
     } catch (error) {
         console.error("Error removing item from cart:", error);
@@ -34,7 +34,7 @@ const ShoppingCart = (props: Props) => {
 
   
   const dataIP = localStorage.getItem('ip_address') ?? ''
-  const encryptedData = encryptData({data: {authorization: dataAuth, ip_address: JSON.parse(dataIP), cart_reference: cartRef}, secretKey:"ticker2020@1234#"})
+  const encryptedData = encryptData({data: {authorization: dataAuth, ip_address: JSON.parse(dataIP), cart_reference: cartRef}, secretKey:process.env.NEXT_PUBLIC_AFROMARKETS_SECRET_KEY})
 
 
   const {mutate:handleCartCheckout} = useMutation({

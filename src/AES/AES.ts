@@ -48,7 +48,7 @@ function hexToUint8Array(hexString:string) {
 // Function to decrypt using Web Crypto API
 export async function decryptAES(encryptedHex:string, key:string | undefined) {
   try {
-    const iv = 'e8f24a9d0c731b5f'
+    const iv = process.env.NEXT_PUBLIC_AFROMARKETS_AUTH_PARAMS
     const keyBytes = new TextEncoder().encode(key);
     const ivBytes = new TextEncoder().encode(iv);
     const encryptedBytes = hexToUint8Array(encryptedHex);

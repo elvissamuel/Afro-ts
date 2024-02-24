@@ -46,7 +46,7 @@ const Product = (props: Props) => {
           data.search_word = searchValue;
         }
     
-        const encryptedData = encryptData({data, secretKey: "ticker2020@1234#"});
+        const encryptedData = encryptData({data, secretKey: process.env.NEXT_PUBLIC_AFROMARKETS_SECRET_KEY});
     
         const result = await getAllItems(encryptedData);
     
@@ -75,7 +75,7 @@ const Product = (props: Props) => {
     })
 
     const allprod = allProducts && allProducts.filter((prod: productProps)=> prod.productId === id)
-    const encryptedData = encryptData({data: {authorization: dataAuth, ip_address: JSON.parse(dataIP), cart_reference: cartRef}, secretKey:"ticker2020@1234#"})
+    const encryptedData = encryptData({data: {authorization: dataAuth, ip_address: JSON.parse(dataIP), cart_reference: cartRef}, secretKey:process.env.NEXT_PUBLIC_AFROMARKETS_SECRET_KEY})
 
 
 
@@ -87,7 +87,7 @@ const Product = (props: Props) => {
         const cartReference = localStorage.getItem('Afro_Cart_Reference') ?? ''
         const cartRef = JSON.parse(cartReference)
         const mydata = {authorization: dataAuth, ip_address: JSON.parse(dataIP), cart_reference: cartRef}
-        const encryptedData = encryptData({data: mydata, secretKey:"ticker2020@1234#"})
+        const encryptedData = encryptData({data: mydata, secretKey:process.env.NEXT_PUBLIC_AFROMARKETS_SECRET_KEY})
         console.log('ddd: ', mydata)
         getAllOrders(encryptedData)
     }
@@ -99,7 +99,7 @@ const Product = (props: Props) => {
               if (isEmpty && homeProduct) {
                   const data = {authorization: dataAuth, ip_address: dataIP, product_id: homeProduct[0].productId, quantity: count }
                   console.log('Sent data: ', data)
-                  const encryptedInfo = encryptData({data, secretKey:"ticker2020@1234#"})
+                  const encryptedInfo = encryptData({data, secretKey:process.env.NEXT_PUBLIC_AFROMARKETS_SECRET_KEY})
                   createCart({encryptedInfo, setLoading, toast, setCount})
                   resolve();
               } else if (homeProduct) {
@@ -107,7 +107,7 @@ const Product = (props: Props) => {
                   const cartRef = JSON.parse(myCartRef)
                   const data = {authorization: dataAuth, ip_address: dataIP, cart_reference: cartRef, product_id: homeProduct[0].productId, quantity: count}
                   console.log('Sent data: ', data)
-                  const encryptedInfo = encryptData({data, secretKey:"ticker2020@1234#"})
+                  const encryptedInfo = encryptData({data, secretKey:process.env.NEXT_PUBLIC_AFROMARKETS_SECRET_KEY})
                   addToCart({encryptedInfo, setLoading, toast, setCount})
                   resolve();
               }

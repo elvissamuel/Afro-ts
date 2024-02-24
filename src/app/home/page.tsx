@@ -34,7 +34,7 @@ const Home = (props: Props) => {
   const {loginAuth, ipAddress, setProducts, products} = contextValues
 
   const myData = {ip_address: JSON.parse(dataIP)}
-  const encryptedData = encryptData({data: myData, secretKey: "ticker2020@1234#"})
+  const encryptedData = encryptData({data: myData, secretKey: process.env.NEXT_PUBLIC_AFROMARKETS_SECRET_KEY})
 
   const fetchData = async () => {
     try {
@@ -43,7 +43,7 @@ const Home = (props: Props) => {
         data.search_word = searchValue;
       }
   
-      const encryptedData = encryptData({data, secretKey: "ticker2020@1234#"});
+      const encryptedData = encryptData({data, secretKey: process.env.NEXT_PUBLIC_AFROMARKETS_SECRET_KEY});
   
       const result = await getAllItems(encryptedData);
   

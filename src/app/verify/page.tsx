@@ -39,7 +39,7 @@ const VerifyEmail = (props: Props) => {
       const token = [input1, input2, input3, input4, input5, input6]
       const verifyCode = token.join('')
       const data = {email: afroUserEmail, token: verifyCode}
-      const encryptedInfo = encryptData({data, secretKey: "ticker2020@1234#"})
+      const encryptedInfo = encryptData({data, secretKey: process.env.NEXT_PUBLIC_AFROMARKETS_SECRET_KEY})
       console.log('token: ', token.join(''), 'email: ', userEmail)
       handleEmailVerification({encryptedInfo, setLoading, router, toast, pathName})
       setTimeout(() => {

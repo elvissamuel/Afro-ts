@@ -41,25 +41,6 @@ const Product = (props: Props) => {
     }
   }, [])
 
-//   const handleAddProduct = ()=>{
-//     if(cart) {
-//         const isEmpty = Object.keys(cart).length === 0;
-//         if (isEmpty){
-//             const data = {authorization: dataAuth, ip_address: dataIP, product_id: props.product.productId, quantity: count }
-//             console.log('Sent data: ', data)
-//             const encryptedInfo = encryptData({data, secretKey: "ticker2020@1234#"})
-//             createCart(encryptedInfo, setLoading, toast, setCount)
-//         } else{
-//             const myCartRef = localStorage.getItem('Afro_Cart_Reference') ?? ''
-//             const cartRef = JSON.parse(myCartRef)
-//             const data = {authorization: dataAuth, ip_address: dataIP, cart_reference: cartRef, product_id: props.product.productId, quantity: count}
-//             console.log('Sent data: ', data)
-//             const encryptedInfo = encryptData({data, secretKey: "ticker2020@1234#"})
-//             addToCart(encryptedInfo, setLoading, toast, setCount)
-//         }
-//     }
-// }
-
 const handleAddProduct = async (): Promise<void> => {
   try {
       if (cart) {
@@ -67,13 +48,13 @@ const handleAddProduct = async (): Promise<void> => {
           if (isEmpty) {
               const data = {authorization: dataAuth, ip_address: dataIP, product_id: props.product.productId, quantity: count};
               console.log('Sent data: ', data);
-              const encryptedInfo = encryptData({data, secretKey: "ticker2020@1234#"});
+              const encryptedInfo = encryptData({data, secretKey: process.env.NEXT_PUBLIC_AFROMARKETS_SECRET_KEY});
               return createCart({encryptedInfo, setLoading, toast, setCount});
           } else {
               
               const data = {authorization: dataAuth, ip_address: dataIP, cart_reference: cartRef, product_id: props.product.productId, quantity: count};
               console.log('Sent data: ', data);
-              const encryptedInfo = encryptData({data, secretKey: "ticker2020@1234#"});
+              const encryptedInfo = encryptData({data, secretKey: process.env.NEXT_PUBLIC_AFROMARKETS_SECRET_KEY});
               return addToCart({encryptedInfo, setLoading, toast, setCount});
           }
       }
@@ -82,7 +63,7 @@ const handleAddProduct = async (): Promise<void> => {
       throw error;
   }
 };
-  const encryptedData = encryptData({data: {authorization: dataAuth, ip_address: JSON.parse(dataIP), cart_reference: cartRef}, secretKey:"ticker2020@1234#"})
+  const encryptedData = encryptData({data: {authorization: dataAuth, ip_address: JSON.parse(dataIP), cart_reference: cartRef}, secretKey:process.env.NEXT_PUBLIC_AFROMARKETS_SECRET_KEY})
 
       
       const {mutate: addProduct} = useMutation({
