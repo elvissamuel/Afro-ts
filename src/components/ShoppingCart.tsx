@@ -7,6 +7,7 @@ import { Toaster, toast } from 'sonner'
 import { encryptData } from '../AES/AES'
 import { useRouter } from 'next/navigation'
 import { LoginResponseBodyProps, OrderProps } from '@/models/models'
+import Image from 'next/image'
 
 type Props = {}
 
@@ -114,7 +115,7 @@ const ShoppingCart = (props: Props) => {
                             {data?.map((order: OrderProps) => (
                               <li key={order.productId} className="flex py-6">
                                 <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
-                                  <img
+                                  <Image
                                     src={order.imageUrl}
                                     alt='product-image'
                                     className="h-full w-full object-cover object-center"

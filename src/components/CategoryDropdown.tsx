@@ -23,14 +23,15 @@ const CategoryDropdown = (props: Props) => {
   // const [categories, setCategories] = useState([])
   const [categories, setCategories] = useState<CategoryProps[]>([])
   const contextValues = useContext(LoginContext)
-  if(!contextValues){
-    return null;
-  }
-  const {productCategory, setProductCategory } = contextValues
+
 
   useEffect(()=>{
     getCategories(setCategories)
   }, [])
+  if(!contextValues){
+    return null;
+  }
+  const {productCategory, setProductCategory } = contextValues
 
   const filteredPeople =
   productCategory === ''

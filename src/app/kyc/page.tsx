@@ -35,7 +35,7 @@ const KnowYourClient = (props: Props) => {
             <form className="space-y-6 px-4" action="#" method="POST">
               <div>
                 <label htmlFor="email" className="block text-sm font-medium leading-6 text-primaryColor">
-                  Owner's Name
+                  Owners Name
                 </label>
                 <div className="mt-2">
                   <input

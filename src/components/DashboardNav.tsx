@@ -58,12 +58,11 @@ const DashboardNav = (props: Props) => {
 
     useEffect(() => {
       if (isSuccess) {
-        console.log('hhh: ', allOrder.length);
         setNoItem(allOrder);
       }else{
         setNoItem([])
       }
-    }, [isSuccess,]);
+    }, [isSuccess, allOrder]);
 
     useEffect(()=>{
       getCategories(setCategories)
@@ -139,7 +138,7 @@ const DashboardNav = (props: Props) => {
                       href="#"
                       className="rounded-md px-3 py-2 text-sm font-bold text-primaryColor hover:bg-secondaryColorVar hover:text-primaryColorVar"
                     >
-                      What's New
+                      What is New
                     </a>
                     <a
                       href="#"

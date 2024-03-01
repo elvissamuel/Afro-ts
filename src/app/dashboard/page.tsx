@@ -8,7 +8,6 @@ import { encryptData } from '@/AES/AES'
 import {TailSpin} from 'react-loader-spinner';
 import Product from '@/components/Product'
 import { Toaster, toast } from 'sonner'
-import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useQuery } from '@tanstack/react-query'
 
@@ -31,21 +30,8 @@ const Dashboard = (props: Props) => {
   const dataIP = localStorage.getItem('ip_address') ?? ''
   const router = useRouter()
 
-let queryCall: QueryFunction;
-
   const contextValues = useContext(LoginContext)
-  if(!contextValues){
-    return null;
-  }
-  const {loginAuth, ipAddress, setProducts, products} = contextValues
 
-  const handleEndpoint = ()=>{
-    if (isBusiness){
-      queryCall = getAllBuisnessProducts
-    }else{
-      queryCall = getAllItems
-    }
-  }
 
   const apiCall = isBusiness ? getAllBuisnessProducts : getAllItems
 
@@ -67,7 +53,7 @@ let queryCall: QueryFunction;
     }
   };
 
-  const {data: allProducts, isLoading, refetch, isError} = useQuery({
+  const {data: allProducts, isLoading, refetch,} = useQuery({
     queryKey: ['All_Afro_Products'],
     queryFn: async () => {
       try{
@@ -83,15 +69,16 @@ let queryCall: QueryFunction;
   
   })
 
-  useEffect(()=>{
-    handleEndpoint()
-  }, [searchValue, refetch])
-
   useEffect(() => {
       refetch();
       console.log('Refetch triggered');
     
   }, [searchValue, refetch]);
+
+  if(!contextValues){
+    return null;
+  }
+  const {setProducts, products} = contextValues
 
   if(isLoading){
     return <div className='flex justify-center items-center mt-20'>

@@ -9,6 +9,7 @@ import { useQueryClient, useMutation } from '@tanstack/react-query';
 import CategoryDropdown from '@/components/CategoryDropdown';
 import { LoginContext } from '@/contexts/LoginContext';
 import DashBoardNav from '@/components/DashboardNav';
+import Image from 'next/image';
 
 type Props = {}
 
@@ -97,7 +98,7 @@ const CeateProduct = (props: Props) => {
                             <div className='w-full h-full'>
                                 {loading ? <div className='w-full h-full text-black flex justify-center items-center'>              
                                 <FadeLoader height={10} width={2} color="#01974B" loading={true} />
-                                </div> : <img className='object-cover w-full h-full' src={imgUrl} alt="product-img" />}
+                                </div> : <Image className='object-cover w-full h-full' src={imgUrl} alt="product-img" />}
                             </div>}
                         <input type="file" className='hidden' name="" id="" ref={inputRef} onChange={handleFileChange} />
                     </div>

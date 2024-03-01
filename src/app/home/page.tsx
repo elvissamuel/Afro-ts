@@ -1,15 +1,11 @@
 "use client"
 import React, { useContext, useEffect, useState } from 'react'
-import DashBoardNav from '@/components/DashboardNav'
 import DashboardBanner from '@/components/DashboardBanner'
 import { getAllItems} from '@/api/api'
 import { LoginContext } from '@/contexts/LoginContext'
-import { decryptAES, encryptData } from '@/AES/AES'
-import {Circles, TailSpin} from 'react-loader-spinner';
-import Product from '@/components/Product'
+import { encryptData } from '@/AES/AES'
+import { TailSpin} from 'react-loader-spinner';
 import { Toaster, toast } from 'sonner'
-// import { Link, useNavigate } from 'react-router-dom'
-import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useQuery } from '@tanstack/react-query'
 import HomeNav from '@/components/HomeNav'
@@ -22,19 +18,11 @@ export type DataSentProp = {
 }
 
 const Home = (props: Props) => {
-  const [loading, setLoading] = useState()
   const [searchValue, setSearchValue] = useState('')
-  const dataAuth = localStorage.getItem('My_Login_Auth')
   const dataIP = localStorage.getItem('ip_address') ?? ''
-  const router = useRouter()
   const contextValues = useContext(LoginContext)
-  if(!contextValues){
-    return null;
-  }
-  const {loginAuth, ipAddress, setProducts, products} = contextValues
-
+  
   const myData = {ip_address: JSON.parse(dataIP)}
-  const encryptedData = encryptData({data: myData, secretKey: process.env.NEXT_PUBLIC_AFROMARKETS_SECRET_KEY})
 
   const fetchData = async () => {
     try {
@@ -74,6 +62,13 @@ const Home = (props: Props) => {
       console.log('Refetch triggered');
     
   }, [searchValue, refetch]);
+
+  if(!contextValues){
+    return null;
+  }
+  const { setProducts, products} = contextValues
+
+
   if(isLoading){
     return <div className='flex justify-center items-center mt-20'>
       <TailSpin 

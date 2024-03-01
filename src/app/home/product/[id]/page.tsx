@@ -16,17 +16,14 @@ import Image from 'next/image'
 import { DataSentProp } from '../../page'
 import { TailSpin } from 'react-loader-spinner'
 
-type Props = {
-  product: productProps
-}
+// type Props = {
+//   product: productProps
+// }
 
-const ProductDetails = (props: Props) => {
+const ProductDetails = () => {
   const {id} = useParams();
   const contextValues = useContext(LoginContext)
-  if(!contextValues){
-    return null;
-  }
-  const {count, setCount, setButtonClick, setProducts, products} = contextValues
+
     const [loading, setLoading] = useState(false)
     const [homeProduct, setHomeProduct] = useState<productProps[]>()
     const [searchValue, setSearchValue] = useState('')
@@ -72,6 +69,7 @@ const ProductDetails = (props: Props) => {
       }
       },
     })
+  
 
     const allprod = allProducts && allProducts.filter((prod: productProps)=> prod.productId === id)
     const encryptedData = encryptData({data: {authorization: dataAuth, ip_address: JSON.parse(dataIP), cart_reference: cartRef}, secretKey:process.env.NEXT_PUBLIC_AFROMARKETS_SECRET_KEY})
@@ -131,9 +129,10 @@ const ProductDetails = (props: Props) => {
     const pathSegments = currentPath.split('/')
     const isDashboard = pathSegments[1] === 'dashboard' ? true : false
 
-    useEffect(()=>{
-        console.log('This is param path: ', pathSegments)
-    }, [isDashboard])
+    if(!contextValues){
+      return null;
+    }
+    const {count, setCount, setButtonClick, setProducts, products} = contextValues
 
     return (
     <>
@@ -144,7 +143,7 @@ const ProductDetails = (props: Props) => {
         <div className='flex flex-col lg:flex-row lg:justify-around gap-8 lg:items-center px-8'>
             <div className='w-full  xl:w-1/2'>
                 <div className='md:w-[90%] md:h-[90%] mx-auto xl:w-[450px] xl:h-[450px] shadow-md p-24'>
-                    <img className='w-full h-full' src={allprod[0].imageUrl} alt="" />
+                    <Image className='w-full h-full' src={allprod[0].imageUrl} alt="" />
                 </div>
                 
             </div>
