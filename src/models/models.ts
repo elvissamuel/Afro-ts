@@ -1,7 +1,7 @@
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { NextRouter } from "next/router";
 import { UseFormReset } from "react-hook-form";
-import { ToastT, Toaster, ToastTypes, PromiseData, PromiseT } from "sonner";
+import { PromiseData, PromiseT } from "sonner";
 import { ExternalToast } from "sonner";
 
 type ToastFunction = ((message: string | React.ReactNode, data?: ExternalToast) => string | number) & {
