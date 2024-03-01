@@ -1,6 +1,6 @@
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
-import { NextRouter } from "next/router";
 import { UseFormReset } from "react-hook-form";
+// @ts-ignore
 import { PromiseData, PromiseT } from "sonner";
 import { ExternalToast } from "sonner";
 
