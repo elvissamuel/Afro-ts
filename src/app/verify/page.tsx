@@ -24,13 +24,15 @@ const VerifyEmail = (props: Props) => {
   const [input4, setInput4] = useState('')
   const [input5, setInput5] = useState('')
   const [input6, setInput6] = useState('')
-  const [authSuccessful, setAuthSuccessful] = useState(false)
-  const [authUnsuccessful, setAuthUnsuccessful] = useState(false)
   const [userEmail, setUserEmail] = useState('elvissamuel8@gmail.com')
   const router = useRouter()
   // const {userEmail} = useContext(LoginContext)
   const [loading, setLoading] = useState(false)
-  const afroUserEmail = window.localStorage.getItem('Afro_Email')
+  const [afroUserEmail, setAfroUserEmail] = useState('')
+  if (typeof window !== 'undefined' && window.localStorage) {
+  const afroUserEmail = window.localStorage.getItem('Afro_Email') ?? ''
+  setAfroUserEmail(afroUserEmail)
+  }
   const pathName = usePathname()
 
 

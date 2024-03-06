@@ -7,8 +7,6 @@ import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { Popover,  } from '@headlessui/react'
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
 import logo from "@/assets/imgs/afrologo.png";
-import indomieimg from '@/assets/imgs/indomie.png'
-import garriimg from '@/assets/imgs/garri.png'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { Toaster, toast } from 'sonner'
@@ -17,6 +15,7 @@ import { encryptData } from '@/AES/AES'
 import { getAllOrders, getCategories } from '../api/api'
 import { useQuery, useMutation } from '@tanstack/react-query'
 import Image from 'next/image'
+import { LoginResponseProps } from '@/models/models'
 
 type Props = {
   setSearchValue?: React.Dispatch<React.SetStateAction<string>>
@@ -36,19 +35,30 @@ const DashboardNav = (props: Props) => {
   const [openCart, setOpenCart] = useState(false)
   const [noItem, setNoItem] = useState([])
   const [categories, setCategories] = useState<CategoryProps[]>([]);
-  const loginResponseString = localStorage.getItem('Afro_Login_Response') ?? '{}'
-  const loginResponse = JSON.parse(loginResponseString);
-  const afroUsername =  loginResponse.responseBody.fullName
-  const afroUserEmail = loginResponse.responseBody.email
-    
-  const isBusiness = loginResponse?.responseBody.isBusiness
- 
-    const dataAuth = loginResponse?.responseBody.authorization
-    const userAuth = localStorage.getItem('My_Login_Auth')
+  const [userAuth, setUserAuth] = useState('')
+  const [cartRef, setCartRef] = useState<string>()
+  const [dataIP, setDataIP] = useState<string>()
+  const [loginResponse, setLoginResponse] = useState<LoginResponseProps>()
+
+   
+    if (typeof window !== 'undefined' && window.localStorage) {
+    const userAuth = localStorage.getItem('My_Login_Auth') ?? ''
+    setUserAuth(userAuth)
     const afroCartReference = localStorage.getItem('Afro_Cart_Reference') ?? ''
     const cartRef = JSON.parse(afroCartReference)
+    setCartRef(cartRef)
     const dataIP = localStorage.getItem('ip_address') ?? ''
-    const data = {authorization: dataAuth, ip_address: JSON.parse(dataIP), cart_reference: cartRef}
+    const dataIpParse = JSON.parse(dataIP)
+    setDataIP(dataIpParse)
+    const loginResponseString = localStorage.getItem('Afro_Login_Response') ?? ''
+    const loginResponse = JSON.parse(loginResponseString);
+    setLoginResponse(loginResponse)
+    }
+    const afroUsername =  loginResponse?.responseBody.fullName
+    const afroUserEmail = loginResponse?.responseBody.email
+    const isBusiness = loginResponse?.responseBody.isBusiness
+    const dataAuth = loginResponse?.responseBody.authorizaiton
+    const data = {authorization: dataAuth, ip_address: dataIP, cart_reference: cartRef}
     const encryptedData = encryptData({data, secretKey:process.env.NEXT_PUBLIC_AFROMARKETS_SECRET_KEY})
   
     const {data: allOrder, isSuccess, } = useQuery({

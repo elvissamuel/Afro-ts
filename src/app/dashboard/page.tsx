@@ -10,6 +10,7 @@ import Product from '@/components/Product'
 import { Toaster, toast } from 'sonner'
 import { useRouter } from 'next/navigation'
 import { useQuery } from '@tanstack/react-query'
+import { LoginResponseProps } from '@/models/models'
 
 type Props = {}
 type QueryFunction = typeof getAllBuisnessProducts | typeof getAllItems;
@@ -21,13 +22,26 @@ type DataSentProp = {
 
 const Dashboard = (props: Props) => {
   const [loading, setLoading] = useState(false)
+  const [loginResponse, setLoginResponse] = useState<LoginResponseProps>()
   const [searchValue, setSearchValue] = useState('')
-  const res = localStorage.getItem('Afro_Login_Response') ?? ''
+  const [dataAuth, setDataAuth] = useState('')
+  const [dataIP, setDataIP] = useState('')
+  const [myAuth, setMyAuth] = useState('')
+  if (typeof window !== 'undefined' && window.localStorage){
+  const res = window.localStorage.getItem('Afro_Login_Response') ?? ''
   const loginResponse = JSON.parse(res)
-  const isBusiness = loginResponse?.responseBody.isBusiness
-  const myAuth = localStorage.getItem('My_Login_Auth') ?? ''
+  setLoginResponse(loginResponse)
+  const myAuth = window.localStorage.getItem('My_Login_Auth') ?? ''
   const dataAuth = myAuth && JSON.parse(myAuth)
   const dataIP = localStorage.getItem('ip_address') ?? ''
+  setDataAuth(dataAuth)
+  setDataIP(dataIP)
+  setMyAuth(myAuth)
+  }
+  const isBusiness = loginResponse?.responseBody.isBusiness
+  // @ts-ignore
+
+  // @ts-ignore
   const router = useRouter()
 
   const contextValues = useContext(LoginContext)

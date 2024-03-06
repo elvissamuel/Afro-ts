@@ -10,6 +10,7 @@ import CategoryDropdown from '@/components/CategoryDropdown';
 import { LoginContext } from '@/contexts/LoginContext';
 import DashBoardNav from '@/components/DashboardNav';
 import Image from 'next/image';
+import { LoginResponseProps } from '@/models/models';
 
 type Props = {}
 
@@ -23,10 +24,14 @@ const CeateProduct = (props: Props) => {
     const [productQuantity, setProductQuantity] = useState(0)
     const [productPrice, setProductPrice] = useState(0)
     const [productDescription, setProductDescription] = useState('')
+    const [loginResponse, setLoginResponse] = useState<LoginResponseProps>()
+    if (typeof window !== 'undefined' && window.localStorage) {
     const res = localStorage.getItem('Afro_Login_Response') ?? ''
     const loginResponse = JSON.parse(res)
+    setLoginResponse(loginResponse)
+    }
     const isBusiness = loginResponse?.responseBody.isBusiness
-    const dataAuth = loginResponse?.responseBody.authorization
+    const dataAuth = loginResponse?.responseBody.authorizaiton
     const contextValues = useContext(LoginContext)
   if(!contextValues){
     return null;

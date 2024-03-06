@@ -19,10 +19,13 @@ export type DataSentProp = {
 
 const Home = (props: Props) => {
   const [searchValue, setSearchValue] = useState('')
+  const [dataIP, setDataIP] = useState('')
+  if (typeof window !== 'undefined' && window.localStorage) {
   const dataIP = localStorage.getItem('ip_address') ?? ''
+  setDataIP(dataIP)
+  }
   const contextValues = useContext(LoginContext)
   
-  const myData = {ip_address: JSON.parse(dataIP)}
 
   const fetchData = async () => {
     try {
