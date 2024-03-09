@@ -21,27 +21,37 @@ type DataSentProp = {
 }
 
 const Dashboard = (props: Props) => {
-  const [loading, setLoading] = useState(false)
   const [loginResponse, setLoginResponse] = useState<LoginResponseProps>()
   const [searchValue, setSearchValue] = useState('')
   const [dataAuth, setDataAuth] = useState('')
   const [dataIP, setDataIP] = useState('')
-  const [myAuth, setMyAuth] = useState('')
-  if (typeof window !== 'undefined' && window.localStorage){
-  const res = window.localStorage.getItem('Afro_Login_Response') ?? ''
-  const loginResponse = JSON.parse(res)
-  setLoginResponse(loginResponse)
-  const myAuth = window.localStorage.getItem('My_Login_Auth') ?? ''
-  const dataAuth = myAuth && JSON.parse(myAuth)
-  const dataIP = localStorage.getItem('ip_address') ?? ''
-  setDataAuth(dataAuth)
-  setDataIP(dataIP)
-  setMyAuth(myAuth)
-  }
-  const isBusiness = loginResponse?.responseBody.isBusiness
-  // @ts-ignore
 
-  // @ts-ignore
+  useEffect(() => {
+    fetch("https://api64.ipify.org?format=json")
+      .then((response) => response.json())
+      .then((data) => {
+        const myIPAddress = data.ip;
+        setDataIP(myIPAddress);
+      })
+      .catch((error) => {
+        console.error("Error fetching IP:", error);
+      });
+  }, []);
+  
+
+  useEffect(()=>{
+    if (typeof window !== 'undefined' && window.localStorage){
+      const res = window.localStorage.getItem('Afro_Login_Response') ?? ''
+      const loginResponse = JSON.parse(res)
+      setLoginResponse(loginResponse)
+      const myAuth = window.localStorage.getItem('My_Login_Auth') ?? ''
+      const dataAuth = JSON.parse(myAuth)
+      setDataAuth(dataAuth)
+      // setDataIP(dataIP)
+      }
+  }, [])
+  const isBusiness = loginResponse?.responseBody.isBusiness
+
   const router = useRouter()
 
   const contextValues = useContext(LoginContext)
@@ -51,7 +61,7 @@ const Dashboard = (props: Props) => {
 
   const fetchData = async () => {
     try {
-      let data: DataSentProp = { authorization: dataAuth, ip_address: JSON.parse(dataIP) };
+      let data: DataSentProp = { authorization: dataAuth, ip_address: dataIP };
       if (searchValue !== '') {
         data.search_word = searchValue;
       }
@@ -102,7 +112,7 @@ const Dashboard = (props: Props) => {
           width={50} 
         />
     </div>
-  } else if(myAuth === ''){
+  } else if(dataAuth === ''){
     return(
       <div className='mx-auto mt-32 text-center'>
         <p>You have to login first to view this page</p>

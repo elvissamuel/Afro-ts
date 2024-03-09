@@ -143,7 +143,7 @@ const ProductDetails = () => {
         <div className='flex flex-col lg:flex-row lg:justify-around gap-8 lg:items-center px-8'>
             <div className='w-full  xl:w-1/2'>
                 <div className='md:w-[90%] md:h-[90%] mx-auto xl:w-[450px] xl:h-[450px] shadow-md p-24'>
-                    <Image className='w-full h-full' src={allprod[0].imageUrl} alt="" />
+                    <Image className='w-full h-full' src={allprod[0].imageUrl} alt="" width={100} height={100} />
                 </div>
                 
             </div>

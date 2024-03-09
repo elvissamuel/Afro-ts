@@ -20,16 +20,26 @@ export type DataSentProp = {
 const Home = (props: Props) => {
   const [searchValue, setSearchValue] = useState('')
   const [dataIP, setDataIP] = useState('')
-  if (typeof window !== 'undefined' && window.localStorage) {
-  const dataIP = localStorage.getItem('ip_address') ?? ''
-  setDataIP(dataIP)
-  }
+
+  useEffect(() => {
+    fetch("https://api64.ipify.org?format=json")
+      .then((response) => response.json())
+      .then((data) => {
+        const myIPAddress = data.ip;
+        setDataIP(myIPAddress);
+      })
+      .catch((error) => {
+        console.error("Error fetching IP:", error);
+      });
+  }, []);
+
+  
   const contextValues = useContext(LoginContext)
   
 
   const fetchData = async () => {
     try {
-      let data:DataSentProp = { ip_address: JSON.parse(dataIP) };
+      let data:DataSentProp =  { ip_address: dataIP };
       if (searchValue !== '') {
         data.search_word = searchValue;
       }
@@ -80,12 +90,13 @@ const Home = (props: Props) => {
           width={50} 
         />
     </div>
-  } else return (
+  } return (
     <div className='font-lato'>
       <HomeNav setSearchValue={setSearchValue} />
       <DashboardBanner />
       <Toaster position="top-center" />
       <div className='grid gap-1 md:grid-cols-2 lg:grid-cols-4 w-[90%] mx-auto '>
+        {/* <p>{allProducts && JSON.stringify(allProducts)}</p> */}
         {products?.map((product, index)=>(
           <div key={index} className='cursor-pointer my-6 flex items-center justify-center'>
             <HomeProducts product={product} />

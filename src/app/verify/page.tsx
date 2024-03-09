@@ -29,10 +29,13 @@ const VerifyEmail = (props: Props) => {
   // const {userEmail} = useContext(LoginContext)
   const [loading, setLoading] = useState(false)
   const [afroUserEmail, setAfroUserEmail] = useState('')
-  if (typeof window !== 'undefined' && window.localStorage) {
-  const afroUserEmail = window.localStorage.getItem('Afro_Email') ?? ''
-  setAfroUserEmail(afroUserEmail)
-  }
+
+  useEffect(()=>{
+    if (typeof window !== 'undefined' && window.localStorage) {
+      const afroUserEmail = window.localStorage.getItem('Afro_Email') ?? ''
+      setAfroUserEmail(afroUserEmail)
+      }
+  }, [])
   const pathName = usePathname()
 
 

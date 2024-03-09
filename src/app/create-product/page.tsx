@@ -1,5 +1,5 @@
 "use client"
-import React, { useContext, useRef, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import { createNewProduct, getImageUrl } from '@/api/api'
 import { encryptData } from '@/AES/AES'
 import { FadeLoader } from "react-spinners";
@@ -15,7 +15,6 @@ import { LoginResponseProps } from '@/models/models';
 type Props = {}
 
 const CeateProduct = (props: Props) => {
-
     const inputRef = useRef<HTMLInputElement>(null)
     const [imgFIle, setImgFile] = useState<File>()
     const [imgUrl, setImgUrl] = useState('')
@@ -25,14 +24,16 @@ const CeateProduct = (props: Props) => {
     const [productPrice, setProductPrice] = useState(0)
     const [productDescription, setProductDescription] = useState('')
     const [loginResponse, setLoginResponse] = useState<LoginResponseProps>()
-    if (typeof window !== 'undefined' && window.localStorage) {
-    const res = localStorage.getItem('Afro_Login_Response') ?? ''
-    const loginResponse = JSON.parse(res)
-    setLoginResponse(loginResponse)
-    }
+    const contextValues = useContext(LoginContext)
     const isBusiness = loginResponse?.responseBody.isBusiness
     const dataAuth = loginResponse?.responseBody.authorizaiton
-    const contextValues = useContext(LoginContext)
+    useEffect(()=>{
+      if (typeof window !== 'undefined') {
+        const res = localStorage.getItem('Afro_Login_Response') ?? ''
+        const loginResponse = JSON.parse(res)
+        setLoginResponse(loginResponse)
+        }
+    }, [])
   if(!contextValues){
     return null;
   }

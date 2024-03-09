@@ -41,19 +41,22 @@ const DashboardNav = (props: Props) => {
   const [loginResponse, setLoginResponse] = useState<LoginResponseProps>()
 
    
-    if (typeof window !== 'undefined' && window.localStorage) {
-    const userAuth = localStorage.getItem('My_Login_Auth') ?? ''
-    setUserAuth(userAuth)
-    const afroCartReference = localStorage.getItem('Afro_Cart_Reference') ?? ''
-    const cartRef = JSON.parse(afroCartReference)
-    setCartRef(cartRef)
-    const dataIP = localStorage.getItem('ip_address') ?? ''
-    const dataIpParse = JSON.parse(dataIP)
-    setDataIP(dataIpParse)
-    const loginResponseString = localStorage.getItem('Afro_Login_Response') ?? ''
-    const loginResponse = JSON.parse(loginResponseString);
-    setLoginResponse(loginResponse)
-    }
+    
+    useEffect(()=>{
+      if (typeof window !== 'undefined') {
+        const userAuth = localStorage.getItem('My_Login_Auth') ?? ''
+        setUserAuth(userAuth)
+        const afroCartReference = localStorage.getItem('Afro_Cart_Reference') ?? ''
+        const cartRef = JSON.parse(afroCartReference)
+        setCartRef(cartRef)
+        const dataIP = localStorage.getItem('ip_address') ?? ''
+        const dataIpParse = JSON.parse(dataIP)
+        setDataIP(dataIpParse)
+        const loginResponseString = localStorage.getItem('Afro_Login_Response') ?? ''
+        const loginResponse = JSON.parse(loginResponseString);
+        setLoginResponse(loginResponse)
+        }
+    }, [])
     const afroUsername =  loginResponse?.responseBody.fullName
     const afroUserEmail = loginResponse?.responseBody.email
     const isBusiness = loginResponse?.responseBody.isBusiness
@@ -104,6 +107,8 @@ const DashboardNav = (props: Props) => {
                       className="h-10 w-auto"
                       src={logo}
                       alt="Your Company"
+                      width={100}
+                      height={100}
                     />
                   </Link>
                 </div>
