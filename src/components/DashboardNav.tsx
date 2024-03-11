@@ -66,7 +66,8 @@ const DashboardNav = (props: Props) => {
   
     const {data: allOrder, isSuccess, } = useQuery({
       queryKey: ['All_Afro_Orders'],
-      queryFn: async ()=>getAllOrders(encryptedData)
+      queryFn: async ()=>getAllOrders(encryptedData),
+      enabled: userAuth !== ''
     })
 
     useEffect(() => {
@@ -84,7 +85,9 @@ const DashboardNav = (props: Props) => {
 
   const handleLogout = () => {
     setLogout(true)
+    if(typeof window !== 'undefined' && window.localStorage){
     window.localStorage.setItem('My_Login_Auth', '')
+    }
     setTimeout(() => {
       toast.loading("You've logged out successfully")
     }, 500);
