@@ -2,7 +2,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import StarComponent from '@/components/StarComponent'
 import ButtonComponent from '@/components/ButtonComponent'
-import DashBoardNav from '@/components/DashboardNav'
 import Counter from '@/components/Counter'
 import { LoginContext } from '@/contexts/LoginContext'
 import { addToCart, createCart, getAllItems, getAllOrders, getCategories } from '@/api/api'
@@ -10,7 +9,7 @@ import { Toaster, toast } from 'sonner'
 import { encryptData } from '@/AES/AES'
 import { useQueryClient, useMutation, useQuery } from '@tanstack/react-query';
 import HomeNav from '@/components/HomeNav'
-import { productProps } from '@/models/models'
+import { LoginResponseProps, productProps } from '@/models/models'
 import { useParams } from 'next/navigation'
 import Image from 'next/image'
 import { DataSentProp } from '../../page'
@@ -27,17 +26,32 @@ const ProductDetails = () => {
     const [loading, setLoading] = useState(false)
     const [homeProduct, setHomeProduct] = useState<productProps[]>()
     const [searchValue, setSearchValue] = useState('')
-    const res = localStorage.getItem('Afro_Login_Response') ?? ''
-    const loginResponse = JSON.parse(res)
-    const dataAuth = loginResponse?.responseBody.authorization
-    const cartRef = localStorage.getItem('Afro_Cart') ?? ''
-    const cart = JSON.parse(cartRef)
-    const dataIP = JSON.stringify(localStorage.getItem('ip_address'))
-    const queryClient = useQueryClient()
+    const [loginResponse, setLoginResponse] = useState<LoginResponseProps>()
+    const [dataIP, setDataIP] = useState('')
+
+    useEffect(() => {
+      fetch("https://api64.ipify.org?format=json")
+        .then((response) => response.json())
+        .then((data) => {
+          const myIPAddress = data.ip;
+          setDataIP(myIPAddress);
+        })
+        .catch((error) => {
+          console.error("Error fetching IP:", error);
+        });
+    }, []);
+    
+    useEffect(()=>{
+      if (typeof window !== 'undefined' && window.localStorage){
+        const res = localStorage.getItem('Afro_Login_Response') ?? ''
+        const loginResponse = JSON.parse(res)
+        setLoginResponse(loginResponse)
+      }
+    }, [])
 
     const fetchData = async () => {
       try {
-        let data:DataSentProp = { ip_address: JSON.parse(dataIP) };
+        let data:DataSentProp = { ip_address: dataIP };
         if (searchValue !== '') {
           data.search_word = searchValue;
         }
@@ -72,62 +86,7 @@ const ProductDetails = () => {
   
 
     const allprod = allProducts && allProducts.filter((prod: productProps)=> prod.productId === id)
-    const encryptedData = encryptData({data: {authorization: dataAuth, ip_address: JSON.parse(dataIP), cart_reference: cartRef}, secretKey:process.env.NEXT_PUBLIC_AFROMARKETS_SECRET_KEY})
 
-
-
-    const getCart = () =>{
-        const loginRes = localStorage.getItem('Afro_Login_Response') ?? ''
-        const loginResponse = JSON.parse(loginRes)
-        const dataIP = localStorage.getItem('ip_address') ?? ''
-        const dataAuth = loginResponse?.responseBody.authorization
-        const cartReference = localStorage.getItem('Afro_Cart_Reference') ?? ''
-        const cartRef = JSON.parse(cartReference)
-        const mydata = {authorization: dataAuth, ip_address: JSON.parse(dataIP), cart_reference: cartRef}
-        const encryptedData = encryptData({data: mydata, secretKey: process.env.NEXT_PUBLIC_AFROMARKETS_SECRET_KEY})
-        console.log('ddd: ', mydata)
-        getAllOrders(encryptedData)
-    }
-
-    const handleAddProduct = async (): Promise<void> => {
-      return new Promise((resolve, reject) => {
-          if (cart) {
-              const isEmpty = Object.keys(cart).length === 0;
-              if (isEmpty && homeProduct) {
-                  const data = {authorization: dataAuth, ip_address: dataIP, product_id: homeProduct[0].productId, quantity: count }
-                  console.log('Sent data: ', data)
-                  const encryptedInfo = encryptData({data, secretKey:process.env.NEXT_PUBLIC_AFROMARKETS_SECRET_KEY})
-                  createCart({encryptedInfo, setLoading, toast, setCount})
-                  resolve();
-              } else if (homeProduct) {
-                  const myCartRef = localStorage.getItem('Afro_Cart_Reference') ?? '' 
-                  const cartRef = JSON.parse(myCartRef)
-                  const data = {authorization: dataAuth, ip_address: dataIP, cart_reference: cartRef, product_id: homeProduct[0].productId, quantity: count}
-                  console.log('Sent data: ', data)
-                  const encryptedInfo = encryptData({data, secretKey:process.env.NEXT_PUBLIC_AFROMARKETS_SECRET_KEY})
-                  addToCart({encryptedInfo, setLoading, toast, setCount})
-                  resolve();
-              }
-          } else {
-              reject(new Error('Cart is not defined'));
-          }
-      });
-  }
-    const {mutate: addProduct} = useMutation({
-        mutationFn: handleAddProduct,
-        onSuccess: async () => {
-          try {
-              const orders = await getAllOrders(encryptedData);
-              console.log("Updated orders:", orders);
-          } catch (error) {
-              console.error("Error fetching orders:", error);
-          }
-      },
-    })
-
-    const currentPath = window.location.pathname
-    const pathSegments = currentPath.split('/')
-    const isDashboard = pathSegments[1] === 'dashboard' ? true : false
 
     if(!contextValues){
       return null;
@@ -136,7 +95,8 @@ const ProductDetails = () => {
 
     return (
     <>
-    {isDashboard ? <DashBoardNav /> : <HomeNav />}
+    
+     <HomeNav />
         <Toaster richColors position='top-center' />
         {allprod ? 
         <div key={allprod[0].productId} className='w-full xl:w-[85%] mx-auto my-6'>
@@ -160,14 +120,12 @@ const ProductDetails = () => {
                     <span className='text-sm'>{allprod[0].description}</span>
                 </div>
                 <div className='flex items-center my-2 justify-between gap-2 w-[415px] pr-6'>
-                    {isDashboard ?
-                     <button onClick={()=>{addProduct(); setButtonClick(prev => !prev)}} className='w-[251px] bg-secondaryColor font-semibold text-primaryColor rounded-lg h-[40px]'>Add to Cart</button> 
-                    :
+
                      <button onClick={()=>{toast.warning("Can't Add to Cart", {description: 'You have to sign in before adding to cart'}); setButtonClick(prev => !prev)}} className='w-[251px] bg-secondaryColor font-semibold text-primaryColor rounded-lg h-[40px]'>Add to Cart</button>
-                     }
+                     
                     <Counter />
                 </div>
-                <ButtonComponent handleClick={getCart} title='Add to wishlist' />
+                <ButtonComponent handleClick={()=> console.log('button was clicked')} title='Add to wishlist' />
             </div>
         </div>
 

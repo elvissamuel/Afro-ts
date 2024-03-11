@@ -116,7 +116,7 @@ const ShoppingCart = (props: Props) => {
                               <li key={order.productId} className="flex py-6">
                                 <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
                                   <Image
-                                    src={order.imageUrl}
+                                    src={order.imageUrl} width={100} height={100}
                                     alt='product-image'
                                     className="h-full w-full object-cover object-center"
                                   />

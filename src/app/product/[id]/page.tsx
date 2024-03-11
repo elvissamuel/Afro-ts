@@ -10,7 +10,7 @@ import { Toaster, toast } from 'sonner'
 import { encryptData } from '@/AES/AES'
 import { useQueryClient, useMutation, useQuery } from '@tanstack/react-query';
 import HomeNav from '@/components/HomeNav'
-import { productProps } from '@/models/models'
+import { LoginResponseProps, productProps } from '@/models/models'
 import { useParams, usePathname } from 'next/navigation'
 import Image from 'next/image'
 import { DataSentProp } from '@/app/home/page'
@@ -28,17 +28,45 @@ const Product = (props: Props) => {
     const [loading, setLoading] = useState(false)
     const [homeProduct, setHomeProduct] = useState<productProps[]>()
     const [searchValue, setSearchValue] = useState('')
-    const res = localStorage.getItem('Afro_Login_Response') ?? ''
-    const loginResponse = JSON.parse(res)
-    const dataAuth = loginResponse?.responseBody.authorization
-    const cartRef = localStorage.getItem('Afro_Cart') ?? ''
-    const cart = JSON.parse(cartRef)
-    const dataIP = JSON.stringify(localStorage.getItem('ip_address'))
+    const [loginResponse, setLoginResponse] = useState<LoginResponseProps>()
+    const [cart, setCart] = useState()
+    const [dataIP, setDataIP] = useState('')
+    const [cartRef, setCartRef] = useState('')
+
+    const dataAuth = loginResponse?.responseBody.authorizaiton
+
+    // const dataIP = JSON.stringify(localStorage.getItem('ip_address'))
     const queryClient = useQueryClient()
+
+    useEffect(() => {
+      fetch("https://api64.ipify.org?format=json")
+        .then((response) => response.json())
+        .then((data) => {
+          const myIPAddress = data.ip;
+          setDataIP(myIPAddress);
+        })
+        .catch((error) => {
+          console.error("Error fetching IP:", error);
+        });
+    }, []);
+
+    useEffect(()=>{
+      if (typeof window !== 'undefined' && window.localStorage){
+        const res = localStorage.getItem('Afro_Login_Response') ?? ''
+        const loginResponse = JSON.parse(res)
+        setLoginResponse(loginResponse)
+        const cartRe = localStorage.getItem('Afro_Cart') ?? ''
+        const cart = JSON.parse(cartRe)
+        setCart(cart)
+        const cartReference = localStorage.getItem('Afro_Cart_Reference') ?? ''
+        const cartRef = JSON.parse(cartReference)
+        setCartRef(cartRef)
+      }
+    }, [])
 
     const fetchData = async () => {
       try {
-        let data:DataSentProp = { ip_address: JSON.parse(dataIP) };
+        let data:DataSentProp = { ip_address: dataIP };
         if (searchValue !== '') {
           data.search_word = searchValue;
         }
@@ -74,13 +102,12 @@ const Product = (props: Props) => {
     const allprod = allProducts && allProducts.filter((prod: productProps)=> prod.productId === id)
 
     const getCart = () =>{
-        const loginRes = localStorage.getItem('Afro_Login_Response') ?? ''
-        const loginResponse = JSON.parse(loginRes)
-        const dataIP = localStorage.getItem('ip_address') ?? ''
-        const dataAuth = loginResponse?.responseBody.authorization
-        const cartReference = localStorage.getItem('Afro_Cart_Reference') ?? ''
-        const cartRef = JSON.parse(cartReference)
-        const mydata = {authorization: dataAuth, ip_address: JSON.parse(dataIP), cart_reference: cartRef}
+        // const loginRes = localStorage.getItem('Afro_Login_Response') ?? ''
+        // const loginResponse = JSON.parse(loginRes)
+        // const dataIP = localStorage.getItem('ip_address') ?? ''
+        const dataAuth = loginResponse?.responseBody.authorizaiton
+
+        const mydata = {authorization: dataAuth, ip_address: dataIP, cart_reference: cartRef}
         const encryptedData = encryptData({data: mydata, secretKey:process.env.NEXT_PUBLIC_AFROMARKETS_SECRET_KEY})
         console.log('ddd: ', mydata)
         getAllOrders(encryptedData)
