@@ -28,17 +28,34 @@ const HomeNav = (props: Props) => {
   
   const [logout, setLogout] = useState(false)
   const [openCart, setOpenCart] = useState(false)
-  const [myOrder, setMyOrder] = useState([])
   const [categories, setCategories] = useState<CategoryProps[]>([])
-  const res = localStorage.getItem('Afro_Login_Response') ?? ''
-  const loginResponse = JSON.parse(res)
+  const [dataIP, setDataIP] = useState()
+  // const res = localStorage.getItem('Afro_Login_Response') ?? ''
+  // const loginResponse = JSON.parse(res)
 
-    const dataAuth = loginResponse?.responseBody.authorization
-    const cartReference = localStorage.getItem('Afro_Cart_Reference') ?? ''
-    const cartRef = JSON.parse(cartReference)
-    const dataIP = window.localStorage.getItem('ip_address') ?? ''
-    const mydata = {authorization: dataAuth, ip_address: JSON.parse(dataIP), cart_reference: cartRef}
-    const encryptedData = encryptData({data: mydata, secretKey: process.env.NEXT_PUBLIC_AFROMARKETS_SECRET_KEY})
+  useEffect(() => {
+    fetch("https://api64.ipify.org?format=json")
+      .then((response) => response.json())
+      .then((data) => {
+        const myIPAddress = data.ip;
+        setDataIP(myIPAddress);
+      })
+      .catch((error) => {
+        console.error("Error fetching IP:", error);
+      });
+  }, []);
+
+    // const dataAuth = loginResponse?.responseBody.authorization
+    // const cartReference = localStorage.getItem('Afro_Cart_Reference') ?? ''
+    // const cartRef = JSON.parse(cartReference)
+    // const dataIP = window.localStorage.getItem('ip_address') ?? ''
+    // const mydata = {authorization: dataAuth, ip_address: dataIP, cart_reference: cartRef}
+    // const encryptedData = encryptData({data: mydata, secretKey: process.env.NEXT_PUBLIC_AFROMARKETS_SECRET_KEY})
+    
+
+    useEffect(()=> {
+      
+    }, [])
 
     useEffect(()=>{
       getCategories(setCategories)
@@ -47,7 +64,9 @@ const HomeNav = (props: Props) => {
 
   const handleLogout = () => {
     setLogout(true)
+    if (typeof window !== 'undefined' && window.localStorage){
     window.localStorage.setItem('My_Login_Auth', '')
+    }
     setTimeout(() => {
       toast.loading("You've logged out successfully")
     }, 500);
