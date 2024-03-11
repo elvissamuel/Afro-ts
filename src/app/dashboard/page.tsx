@@ -90,14 +90,16 @@ const Dashboard = (props: Props) => {
       throw new Error('Failed to fetch products: ');
     }
     }, 
+    enabled: dataAuth !== '',
+    refetchOnWindowFocus: false,
   
   })
 
-  useEffect(() => {
-      refetch();
-      console.log('Refetch triggered');
+  // useEffect(() => {
+  //     refetch();
+  //     console.log('Refetch triggered');
     
-  }, [searchValue, refetch]);
+  // }, [searchValue, refetch]);
 
   if(!contextValues){
     return null;

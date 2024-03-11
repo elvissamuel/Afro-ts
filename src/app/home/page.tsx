@@ -68,6 +68,7 @@ const Home = (props: Props) => {
       throw new Error('Failed to fetch products: ');
     }
     },
+    enabled: false
   })
 
   useEffect(() => {
