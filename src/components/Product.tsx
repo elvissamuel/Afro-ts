@@ -8,7 +8,7 @@ import { addToCart, createCart, getAllOrders } from '../api/api'
 import { useQueryClient, useMutation } from '@tanstack/react-query';
 import { encryptData } from '../AES/AES'
 import { Toaster, toast } from 'sonner'
-import { productProps } from '@/models/models'
+import { LoginResponseProps, productProps } from '@/models/models'
 import Image from 'next/image'
 
 type Props = {
@@ -18,24 +18,46 @@ type Props = {
 const Product = (props: Props) => {
   const [loading, setLoading] = useState(false)
   const [cart, setCart] = useState({})
-  const res = localStorage.getItem('Afro_Login_Response') ?? ''
-  const loginResponse = JSON.parse(res)
+  const [loginResponse, setLoginResponse] = useState<LoginResponseProps>()
+  const [cartRef, setCartRef] = useState()
+  const [dataIP, setDataIP] = useState()
+
   const isBusiness = loginResponse?.responseBody.isBusiness
-  const dataAuth = loginResponse?.responseBody.authorization
-  const dataIP = JSON.stringify(window.localStorage.getItem('ip_address'))
-  const myCartRef = localStorage.getItem('Afro_Cart_Reference') ?? '';
-  const cartRef = JSON.parse(myCartRef);
+  const dataAuth = loginResponse?.responseBody.authorizaiton
+
   const queryClient = useQueryClient()
 
   const contextValues = useContext(LoginContext)
 
+  useEffect(() => {
+    fetch("https://api64.ipify.org?format=json")
+      .then((response) => response.json())
+      .then((data) => {
+        const myIPAddress = data.ip;
+        setDataIP(myIPAddress);
+      })
+      .catch((error) => {
+        console.error("Error fetching IP:", error);
+      });
+  }, []);
+
   useEffect(()=>{
+    const res = localStorage.getItem('Afro_Login_Response') ?? ''
+    const loginResponse = JSON.parse(res)
+    setLoginResponse(loginResponse)
+    const myCartRef = localStorage.getItem('Afro_Cart_Reference') ?? '';
+    const cartRef = JSON.parse(myCartRef);
+    setCartRef(cartRef)
+  }, [])
+
+  useEffect(()=>{
+    if(typeof window !== 'undefined' && window.localStorage){
     const cartStorage = localStorage.getItem('Afro_Cart')
     if (cartStorage === 'undefined' || cartStorage === null){
       setCart({})
     }else{
       setCart(JSON.parse(cartStorage))
-    }
+    } }
   }, [])
 
 const handleAddProduct = async (): Promise<void> => {
