@@ -135,7 +135,8 @@ const Product = (props: Props) => {
     const {mutate: addProduct} = useMutation({
         mutationFn: handleAddProduct,
         // @ts-ignore
-        onSuccess: queryClient.invalidateQueries({queryKey: ['All_Afro_Orders']})  
+        // onSuccess: queryClient.invalidateQueries({queryKey: ['All_Afro_Orders']}),
+        onSettled: queryClient.invalidateQueries({queryKey: ['All_Afro_Orders']})
     })
 
     const pathSegments = pathName.split('/')

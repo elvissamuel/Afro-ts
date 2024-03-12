@@ -67,8 +67,15 @@ const ShoppingCart = (props: Props) => {
 
   const {data, isLoading, refetch, isSuccess, isError} = useQuery({
     queryKey: ['All_Afro_Orders'],
-    queryFn: async ()=>getAllOrders(encryptedData)
+    queryFn: async ()=>getAllOrders(encryptedData), 
+    enabled: cartRef !== ''
   })
+
+  useEffect(()=>{
+    if(isSuccess && cartRef !== ''){
+      console.log('This is all order on shopping cart: ', data)
+    }
+  }, [isSuccess, data, cartRef])
 
   const {mutate: deleteCartItem} = useMutation({
     mutationFn: (id:number) => handleDeleteItem(id),
@@ -86,17 +93,17 @@ const ShoppingCart = (props: Props) => {
   // }, [loginResponse?.responseBody.cartResponse?.cartReference])
 
   useEffect(() => {
-    if (typeof window !== 'undefined' && window.localStorage && loginResponse?.responseBody.cartResponse?.cartReference !== 'undefined') {
-        const ref = loginResponse?.responseBody.cartResponse?.cartReference
-        if (ref && typeof ref === 'string') {
+    if (typeof window !== 'undefined' && window.localStorage) {
+        const cartReference = localStorage.getItem('Afro_Cart_Reference') ?? ''
+        if (cartReference && typeof cartReference === 'string') {
             try {
-                const parsedRef = JSON.parse(ref);
+                const parsedRef = JSON.parse(cartReference);
                 setCartRef(parsedRef);
             } catch (error) {
                 console.error('Error parsing JSON:', error);
             }
         } else {
-            console.warn('Invalid cart reference:', ref);
+            console.warn('Invalid cart reference:', cartReference);
         }
     }
 }, [loginResponse?.responseBody.cartResponse?.cartReference]);

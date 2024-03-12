@@ -75,7 +75,9 @@ const DashboardNav = (props: Props) => {
           const cartRef = JSON.parse(afroCartReference)
           setCartRef(cartRef)
         }
-        const data = {authorization: userAuth, ip_address: dataIP, cart_reference: cartRef}
+        const afroCartReference = localStorage.getItem('Afro_Cart_Reference') ?? ''
+        const ref = JSON.parse(afroCartReference)
+        const data = {authorization: userAuth, ip_address: dataIP, cart_reference: ref}
         console.log('This is data for all orders for a user before it is sent: ', data)
         const encryptedData = encryptData({data, secretKey:process.env.NEXT_PUBLIC_AFROMARKETS_SECRET_KEY})
         return getAllOrders(encryptedData)
@@ -86,6 +88,7 @@ const DashboardNav = (props: Props) => {
     useEffect(() => {
       if (isSuccess) {
         setNoItem(allOrder);
+        console.log('Na this be all order: ', allOrder)
       }else{
         setNoItem([])
       }

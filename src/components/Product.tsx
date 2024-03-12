@@ -21,6 +21,7 @@ const Product = (props: Props) => {
   const [loginResponse, setLoginResponse] = useState<LoginResponseProps>()
   const [cartRef, setCartRef] = useState()
   const [dataIP, setDataIP] = useState()
+  const [accessToken, setAccessToken] = useState('')
 
   const isBusiness = loginResponse?.responseBody.isBusiness
   const dataAuth = loginResponse?.responseBody.authorizaiton
@@ -46,6 +47,8 @@ const Product = (props: Props) => {
     const res = localStorage.getItem('Afro_Login_Response') ?? ''
     const loginResponse = JSON.parse(res)
     setLoginResponse(loginResponse)
+    const token = localStorage.getItem('My_Login_Auth') ?? ''
+    setAccessToken(JSON.parse(token))
     
     }
   }, [])
@@ -65,16 +68,17 @@ const handleAddProduct = async (): Promise<void> => {
       if (cart) {
           const isEmpty = Object.keys(cart).length === 0;
           if (isEmpty) {
-              const data = {authorization: dataAuth, ip_address: dataIP, product_id: props.product.productId, quantity: count};
+              const data = {authorization: accessToken, ip_address: dataIP, product_id: props.product.productId, quantity: count};
               console.log('Sent data: ', data);
               const encryptedInfo = encryptData({data, secretKey: process.env.NEXT_PUBLIC_AFROMARKETS_SECRET_KEY});
               return createCart({encryptedInfo, setLoading, toast, setCount});
           } else {
               const myCartRef = localStorage.getItem('Afro_Cart_Reference') ?? '';
+              const ref = JSON.parse(myCartRef)
               // const cartRef = JSON.parse(myCartRef);
               setCartRef(cartRef)
               
-              const data = {authorization: dataAuth, ip_address: dataIP, cart_reference: myCartRef, product_id: props.product.productId, quantity: count};
+              const data = {authorization: accessToken, ip_address: dataIP, cart_reference: ref, product_id: props.product.productId, quantity: count};
               console.log('Sent data: ', data);
               const encryptedInfo = encryptData({data, secretKey: process.env.NEXT_PUBLIC_AFROMARKETS_SECRET_KEY});
               return addToCart({encryptedInfo, setLoading, toast, setCount});
