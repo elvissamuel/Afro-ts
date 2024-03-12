@@ -40,16 +40,23 @@ const DashboardNav = (props: Props) => {
   const [dataIP, setDataIP] = useState<string>()
   const [loginResponse, setLoginResponse] = useState<LoginResponseProps>()
 
-   
+  useEffect(() => {
+    fetch("https://api64.ipify.org?format=json")
+      .then((response) => response.json())
+      .then((data) => {
+        const myIPAddress = data.ip;
+        setDataIP(myIPAddress);
+      })
+      .catch((error) => {
+        console.error("Error fetching IP:", error);
+      });
+  }, []);
     
     useEffect(()=>{
       if (typeof window !== 'undefined') {
         const userAuth = localStorage.getItem('My_Login_Auth') ?? ''
         setUserAuth(userAuth)
         
-        const dataIP = localStorage.getItem('ip_address') ?? ''
-        const dataIpParse = JSON.parse(dataIP)
-        setDataIP(dataIpParse)
         const loginResponseString = localStorage.getItem('Afro_Login_Response') ?? ''
         const loginResponse = JSON.parse(loginResponseString);
         setLoginResponse(loginResponse)
