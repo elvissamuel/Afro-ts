@@ -46,9 +46,7 @@ const DashboardNav = (props: Props) => {
       if (typeof window !== 'undefined') {
         const userAuth = localStorage.getItem('My_Login_Auth') ?? ''
         setUserAuth(userAuth)
-        const afroCartReference = localStorage.getItem('Afro_Cart_Reference') ?? ''
-        const cartRef = JSON.parse(afroCartReference)
-        setCartRef(cartRef)
+        
         const dataIP = localStorage.getItem('ip_address') ?? ''
         const dataIpParse = JSON.parse(dataIP)
         setDataIP(dataIpParse)
@@ -61,12 +59,20 @@ const DashboardNav = (props: Props) => {
     const afroUserEmail = loginResponse?.responseBody.email
     const isBusiness = loginResponse?.responseBody.isBusiness
     const dataAuth = loginResponse?.responseBody.authorizaiton
-    const data = {authorization: dataAuth, ip_address: dataIP, cart_reference: cartRef}
-    const encryptedData = encryptData({data, secretKey:process.env.NEXT_PUBLIC_AFROMARKETS_SECRET_KEY})
+    
   
     const {data: allOrder, isSuccess, } = useQuery({
       queryKey: ['All_Afro_Orders'],
-      queryFn: async ()=>getAllOrders(encryptedData),
+      queryFn: async ()=>{
+        if(typeof window !== 'undefined' && window.localStorage){
+          const afroCartReference = localStorage.getItem('Afro_Cart_Reference') ?? ''
+          const cartRef = JSON.parse(afroCartReference)
+          setCartRef(cartRef)
+        }
+        const data = {authorization: dataAuth, ip_address: dataIP, cart_reference: cartRef}
+        const encryptedData = encryptData({data, secretKey:process.env.NEXT_PUBLIC_AFROMARKETS_SECRET_KEY})
+        return getAllOrders(encryptedData)
+      },
       enabled: userAuth !== ''
     })
 

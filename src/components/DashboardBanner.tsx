@@ -13,7 +13,7 @@ const DashboardBanner = (props: Props) => {
             <button className='bg-primaryColor z-30 text-white my-4 px-3 py-1 rounded-lg'>Buy Now</button>
         </div>
         <div className='-mt-32 md:-mt-20 '>
-            <Image src={banner} width={400} className='' alt="banner-img" />
+            <Image src={banner} width={400} height={100} className='' alt="banner-img" />
         </div>
       </div>
     </div>
