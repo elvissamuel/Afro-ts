@@ -72,7 +72,7 @@ const ShoppingCart = (props: Props) => {
   })
 
   useEffect(()=>{
-    if(typeof window !== 'undefined' && window.localStorage && data.length > 0){
+    if(typeof window !== 'undefined' && window.localStorage && data !== 'undefined'){
     const cartReference = localStorage.getItem('Afro_Cart_Reference') ?? ''
     const cartRef = JSON.parse(cartReference)
     setCartRef(cartRef)
