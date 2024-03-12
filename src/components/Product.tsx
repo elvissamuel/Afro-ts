@@ -42,12 +42,14 @@ const Product = (props: Props) => {
   }, []);
 
   useEffect(()=>{
+    if(typeof window !== 'undefined' && window.localStorage){
     const res = localStorage.getItem('Afro_Login_Response') ?? ''
     const loginResponse = JSON.parse(res)
     setLoginResponse(loginResponse)
     const myCartRef = localStorage.getItem('Afro_Cart_Reference') ?? '';
     const cartRef = JSON.parse(myCartRef);
     setCartRef(cartRef)
+    }
   }, [])
 
   useEffect(()=>{
