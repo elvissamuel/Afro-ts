@@ -31,8 +31,8 @@ const Product = (props: Props) => {
     const [loginResponse, setLoginResponse] = useState<LoginResponseProps>()
     const [cart, setCart] = useState()
     const [dataIP, setDataIP] = useState('')
+    const [myAuth, setMyAuth] = useState('')
 
-    const dataAuth = loginResponse?.responseBody.authorizaiton
 
     // const dataIP = JSON.stringify(localStorage.getItem('ip_address'))
     const queryClient = useQueryClient()
@@ -57,6 +57,8 @@ const Product = (props: Props) => {
         const cartRe = localStorage.getItem('Afro_Cart') ?? ''
         const cart = JSON.parse(cartRe)
         setCart(cart)
+        const myAuth = localStorage.getItem('My_Login_Auth') ?? ''
+        setMyAuth(JSON.parse(myAuth))
       }
     }, [])
 
@@ -111,7 +113,7 @@ const Product = (props: Props) => {
           if (cart) {
               const isEmpty = Object.keys(cart).length === 0;
               if (isEmpty && homeProduct) {
-                  const data = {authorization: dataAuth, ip_address: dataIP, product_id: homeProduct[0].productId, quantity: count }
+                  const data = {authorization: myAuth, ip_address: dataIP, product_id: homeProduct[0].productId, quantity: count }
                   console.log('Sent data: ', data)
                   const encryptedInfo = encryptData({data, secretKey:process.env.NEXT_PUBLIC_AFROMARKETS_SECRET_KEY})
                   createCart({encryptedInfo, setLoading, toast, setCount})
@@ -119,7 +121,7 @@ const Product = (props: Props) => {
               } else if (homeProduct) {
                   const myCartRef = localStorage.getItem('Afro_Cart_Reference') ?? '' 
                   const cartRef = JSON.parse(myCartRef)
-                  const data = {authorization: dataAuth, ip_address: dataIP, cart_reference: cartRef, product_id: homeProduct[0].productId, quantity: count}
+                  const data = {authorization: myAuth, ip_address: dataIP, cart_reference: cartRef, product_id: homeProduct[0].productId, quantity: count}
                   console.log('Sent data: ', data)
                   const encryptedInfo = encryptData({data, secretKey:process.env.NEXT_PUBLIC_AFROMARKETS_SECRET_KEY})
                   addToCart({encryptedInfo, setLoading, toast, setCount})
@@ -133,14 +135,7 @@ const Product = (props: Props) => {
     const {mutate: addProduct} = useMutation({
         mutationFn: handleAddProduct,
         // @ts-ignore
-        onSuccess: queryClient.invalidateQueries({queryKey: ['All_Afro_Orders']})
-          // try {
-          //     const orders = await getAllOrders(encryptedData);
-          //     console.log("Updated orders:", orders);
-          // } catch (error) {
-          //     console.error("Error fetching orders:", error);
-          // }
-      
+        onSuccess: queryClient.invalidateQueries({queryKey: ['All_Afro_Orders']})  
     })
 
     const pathSegments = pathName.split('/')
@@ -153,7 +148,7 @@ const Product = (props: Props) => {
 
     return (
     <>
-    {isDashboard ? <DashBoardNav /> : <HomeNav />}
+      <DashBoardNav />
         <Toaster richColors position='top-center' />
         {allprod ? 
         <div key={allprod[0].productId} className='w-full xl:w-[85%] mx-auto my-6'>
@@ -177,11 +172,9 @@ const Product = (props: Props) => {
                     <span className='text-sm'>{allprod[0].description}</span>
                 </div>
                 <div className='flex items-center my-2 justify-between gap-2 w-[415px] pr-6'>
-                    {isDashboard ?
+                    
                      <button onClick={()=>{addProduct(); setButtonClick(prev => !prev)}} className='w-[251px] bg-secondaryColor font-semibold text-primaryColor rounded-lg h-[40px]'>Add to Cart</button> 
-                    :
-                     <button onClick={()=>{toast.warning("Can't Add to Cart", {description: 'You have to sign in before adding to cart'}); setButtonClick(prev => !prev)}} className='w-[251px] bg-secondaryColor font-semibold text-primaryColor rounded-lg h-[40px]'>Add to Cart</button>
-                     }
+                     
                     <Counter />
                 </div>
                 <ButtonComponent handleClick={()=>console.log('Get wishlist button was clicked')} title='Add to wishlist' />

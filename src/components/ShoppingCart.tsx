@@ -17,8 +17,8 @@ const ShoppingCart = (props: Props) => {
   const [cartRef, setCartRef] = useState('')
   const [dataIP, setDataIP] = useState('')
   const [loginResponse, setLoginResponse] = useState<LoginResponseProps>()
+  const [accessToken, setAccessToken] = useState('')
 
-  const dataAuth = loginResponse?.responseBody.authorizaiton
 
   useEffect(() => {
     fetch("https://api64.ipify.org?format=json")
@@ -37,12 +37,14 @@ const ShoppingCart = (props: Props) => {
       const res = localStorage.getItem('Afro_Login_Response') ?? ''
       const loginResponse = JSON.parse(res)
       setLoginResponse(loginResponse)
+      const accessToken = localStorage.getItem('My_Login_Auth') ?? ''
+      setAccessToken(JSON.parse(accessToken))
     }
   }, [])
 
   const handleDeleteItem = async (id: number): Promise<any> => {
     try {
-        const data = {authorization: dataAuth, cart_reference: cartRef, product_id: id};
+        const data = {authorization: accessToken, cart_reference: cartRef, product_id: id};
         console.log('sent data: ', data);
         const encryptedInfo = encryptData({data, secretKey: process.env.NEXT_PUBLIC_AFROMARKETS_SECRET_KEY});
         return removeFromCart({encryptedInfo, setLoading, toast});
@@ -52,7 +54,11 @@ const ShoppingCart = (props: Props) => {
     }
 };
   
-  const encryptedData = encryptData({data: {authorization: dataAuth, ip_address: dataIP, cart_reference: cartRef}, secretKey:process.env.NEXT_PUBLIC_AFROMARKETS_SECRET_KEY})
+  const encryptedData = encryptData({data: {authorization: accessToken, ip_address: dataIP, cart_reference: cartRef}, secretKey:process.env.NEXT_PUBLIC_AFROMARKETS_SECRET_KEY})
+
+  useEffect(()=>{
+    console.log('This is data sent to get all orders: ', {authorization: accessToken, ip_address: dataIP, cart_reference: cartRef})
+  }, [accessToken, dataIP, cartRef])
 
 
   const {mutate:handleCartCheckout} = useMutation({
@@ -74,7 +80,7 @@ const ShoppingCart = (props: Props) => {
   useEffect(()=>{
     if(typeof window !== 'undefined' && window.localStorage && data !== 'undefined'){
     const cartReference = localStorage.getItem('Afro_Cart_Reference') ?? ''
-    setCartRef(cartReference)
+    setCartRef(JSON.parse(cartReference))
     }
   }, [data])
   

@@ -55,8 +55,7 @@ const DashboardNav = (props: Props) => {
     useEffect(()=>{
       if (typeof window !== 'undefined') {
         const userAuth = localStorage.getItem('My_Login_Auth') ?? ''
-        setUserAuth(userAuth)
-        
+        setUserAuth(JSON.parse(userAuth))
         const loginResponseString = localStorage.getItem('Afro_Login_Response') ?? ''
         const loginResponse = JSON.parse(loginResponseString);
         setLoginResponse(loginResponse)
@@ -76,7 +75,8 @@ const DashboardNav = (props: Props) => {
           const cartRef = JSON.parse(afroCartReference)
           setCartRef(cartRef)
         }
-        const data = {authorization: dataAuth, ip_address: dataIP, cart_reference: cartRef}
+        const data = {authorization: userAuth, ip_address: dataIP, cart_reference: cartRef}
+        console.log('This is data for all orders for a user before it is sent: ', data)
         const encryptedData = encryptData({data, secretKey:process.env.NEXT_PUBLIC_AFROMARKETS_SECRET_KEY})
         return getAllOrders(encryptedData)
       },
