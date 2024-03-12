@@ -52,7 +52,7 @@ const ShoppingCart = (props: Props) => {
     }
 };
   
-  const encryptedData = encryptData({data: {authorization: dataAuth, ip_address: JSON.parse(dataIP), cart_reference: cartRef}, secretKey:process.env.NEXT_PUBLIC_AFROMARKETS_SECRET_KEY})
+  const encryptedData = encryptData({data: {authorization: dataAuth, ip_address: dataIP, cart_reference: cartRef}, secretKey:process.env.NEXT_PUBLIC_AFROMARKETS_SECRET_KEY})
 
 
   const {mutate:handleCartCheckout} = useMutation({
