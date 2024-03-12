@@ -14,7 +14,7 @@ type Props = {}
 const ShoppingCart = (props: Props) => {
   const [open, setOpen] = useState(true)
   const [loading, setLoading] = useState(false)
-  const [cartRef, setCartRef] = useState()
+  const [cartRef, setCartRef] = useState('')
   const [dataIP, setDataIP] = useState('')
   const [loginResponse, setLoginResponse] = useState<LoginResponseProps>()
 
@@ -74,8 +74,7 @@ const ShoppingCart = (props: Props) => {
   useEffect(()=>{
     if(typeof window !== 'undefined' && window.localStorage && data !== 'undefined'){
     const cartReference = localStorage.getItem('Afro_Cart_Reference') ?? ''
-    const cartRef = JSON.parse(cartReference)
-    setCartRef(cartRef)
+    setCartRef(cartReference)
     }
   }, [data])
   
