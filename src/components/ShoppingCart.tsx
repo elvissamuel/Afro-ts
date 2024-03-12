@@ -1,4 +1,4 @@
-import { Fragment, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
@@ -6,7 +6,7 @@ import { getAllOrders, removeFromCart, handleCheckout } from '@/api/api'
 import { Toaster, toast } from 'sonner'
 import { encryptData } from '../AES/AES'
 import { useRouter } from 'next/navigation'
-import { LoginResponseBodyProps, OrderProps } from '@/models/models'
+import { LoginResponseBodyProps, LoginResponseProps, OrderProps } from '@/models/models'
 import Image from 'next/image'
 
 type Props = {}
@@ -14,12 +14,31 @@ type Props = {}
 const ShoppingCart = (props: Props) => {
   const [open, setOpen] = useState(true)
   const [loading, setLoading] = useState(false)
-  const res = localStorage.getItem('Afro_Login_Response') ?? ''
-  const loginResponse = JSON.parse(res)
-  const dataAuth = loginResponse?.responseBody.authorization
-  const cartReference = localStorage.getItem('Afro_Cart_Reference') ?? ''
-  const cartRef = JSON.parse(cartReference)
-  const router = useRouter()
+  const [cartRef, setCartRef] = useState()
+  const [dataIP, setDataIP] = useState('')
+  const [loginResponse, setLoginResponse] = useState<LoginResponseProps>()
+
+  const dataAuth = loginResponse?.responseBody.authorizaiton
+
+  useEffect(() => {
+    fetch("https://api64.ipify.org?format=json")
+      .then((response) => response.json())
+      .then((data) => {
+        const myIPAddress = data.ip;
+        setDataIP(myIPAddress);
+      })
+      .catch((error) => {
+        console.error("Error fetching IP:", error);
+      });
+  }, []);
+
+  useEffect(()=>{
+    if(typeof window !== 'undefined' && window.localStorage){
+      const res = localStorage.getItem('Afro_Login_Response') ?? ''
+      const loginResponse = JSON.parse(res)
+      setLoginResponse(loginResponse)
+    }
+  }, [])
 
   const handleDeleteItem = async (id: number): Promise<any> => {
     try {
@@ -32,14 +51,12 @@ const ShoppingCart = (props: Props) => {
         throw error;
     }
 };
-
   
-  const dataIP = localStorage.getItem('ip_address') ?? ''
   const encryptedData = encryptData({data: {authorization: dataAuth, ip_address: JSON.parse(dataIP), cart_reference: cartRef}, secretKey:process.env.NEXT_PUBLIC_AFROMARKETS_SECRET_KEY})
 
 
   const {mutate:handleCartCheckout} = useMutation({
-    mutationFn: ()=>handleCheckout({data:encryptedData, setLoading, toast}),
+    mutationFn: ()=> handleCheckout({data:encryptedData, setLoading, toast}),
   })
 
   const {data, isLoading, refetch, isSuccess, isError} = useQuery({
@@ -51,14 +68,16 @@ const ShoppingCart = (props: Props) => {
     mutationFn: (id:number) => handleDeleteItem(id),
     // @ts-ignore
     onSuccess: refetch() 
-      // try {
-      //     const orders = await getAllOrders(encryptedData);
-      //     console.log("Updated orders:", orders);
-      // } catch (error) {
-      //     console.error("Error fetching orders:", error);
-      // }
   
   })
+
+  useEffect(()=>{
+    if(typeof window !== 'undefined' && window.localStorage && data.length > 0){
+    const cartReference = localStorage.getItem('Afro_Cart_Reference') ?? ''
+    const cartRef = JSON.parse(cartReference)
+    setCartRef(cartRef)
+    }
+  }, [data])
   
   const sum = data?.map((val: OrderProps) => val.price).reduce((acc: number, value: number) => {
     return acc + value
