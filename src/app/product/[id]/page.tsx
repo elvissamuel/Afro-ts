@@ -31,7 +31,6 @@ const Product = (props: Props) => {
     const [loginResponse, setLoginResponse] = useState<LoginResponseProps>()
     const [cart, setCart] = useState()
     const [dataIP, setDataIP] = useState('')
-    const [cartRef, setCartRef] = useState('')
 
     const dataAuth = loginResponse?.responseBody.authorizaiton
 
@@ -58,9 +57,6 @@ const Product = (props: Props) => {
         const cartRe = localStorage.getItem('Afro_Cart') ?? ''
         const cart = JSON.parse(cartRe)
         setCart(cart)
-        const cartReference = localStorage.getItem('Afro_Cart_Reference') ?? ''
-        const cartRef = JSON.parse(cartReference)
-        setCartRef(cartRef)
       }
     }, [])
 
@@ -101,17 +97,14 @@ const Product = (props: Props) => {
 
     const allprod = allProducts && allProducts.filter((prod: productProps)=> prod.productId === id)
 
-    const getCart = () =>{
-        // const loginRes = localStorage.getItem('Afro_Login_Response') ?? ''
-        // const loginResponse = JSON.parse(loginRes)
-        // const dataIP = localStorage.getItem('ip_address') ?? ''
-        const dataAuth = loginResponse?.responseBody.authorizaiton
-
-        const mydata = {authorization: dataAuth, ip_address: dataIP, cart_reference: cartRef}
-        const encryptedData = encryptData({data: mydata, secretKey:process.env.NEXT_PUBLIC_AFROMARKETS_SECRET_KEY})
-        console.log('ddd: ', mydata)
-        getAllOrders(encryptedData)
-    }
+    // const getCart = () =>{
+    //     const cartReference = localStorage.getItem('Afro_Cart_Reference') ?? ''
+    //     const dataAuth = loginResponse?.responseBody.authorizaiton
+    //     const mydata = {authorization: dataAuth, ip_address: dataIP, cart_reference: cartReference}
+    //     const encryptedData = encryptData({data: mydata, secretKey:process.env.NEXT_PUBLIC_AFROMARKETS_SECRET_KEY})
+    //     console.log('ddd: ', mydata)
+    //     getAllOrders(encryptedData)
+    // }
 
     const handleAddProduct = async (): Promise<void> => {
       return new Promise((resolve, reject) => {
@@ -191,7 +184,7 @@ const Product = (props: Props) => {
                      }
                     <Counter />
                 </div>
-                <ButtonComponent handleClick={getCart} title='Add to wishlist' />
+                <ButtonComponent handleClick={()=>console.log('Get wishlist button was clicked')} title='Add to wishlist' />
             </div>
         </div>
 
