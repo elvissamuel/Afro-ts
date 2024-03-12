@@ -81,13 +81,17 @@ export interface LoginResponseBodyProps {
   address: string;
   authorizaiton: string;
   businessResponse?: businessResponseProps;
-  cartResponse?: {};
+  cartResponse?: cartReference;
   email: string;
   fullName: string;
   isBusiness: boolean;
   kycStatus: string;
   kycVerified: boolean;
   phoneNumber: string;
+}
+
+export interface cartReference {
+  cartReference: string
 }
 
 export interface CreateCartProps {

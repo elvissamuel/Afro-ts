@@ -77,12 +77,30 @@ const ShoppingCart = (props: Props) => {
   
   })
 
-  useEffect(()=>{
-    if(typeof window !== 'undefined' && window.localStorage && data !== 'undefined'){
-    const cartReference = localStorage.getItem('Afro_Cart_Reference') ?? ''
-    setCartRef(JSON.parse(cartReference))
+  // useEffect(()=>{
+  //   if(typeof window !== 'undefined' && window.localStorage && loginResponse?.responseBody.cartResponse?.cartReference !== 'undefined'){
+  //   // const cartReference = localStorage.getItem('Afro_Cart_Reference') ?? ''
+  //   const ref = loginResponse?.responseBody.cartResponse?.cartReference ?? ''
+  //   setCartRef(JSON.parse(ref))
+  //   }
+  // }, [loginResponse?.responseBody.cartResponse?.cartReference])
+
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.localStorage && loginResponse?.responseBody.cartResponse?.cartReference !== 'undefined') {
+        const ref = loginResponse?.responseBody.cartResponse?.cartReference
+        if (ref && typeof ref === 'string') {
+            try {
+                const parsedRef = JSON.parse(ref);
+                setCartRef(parsedRef);
+            } catch (error) {
+                console.error('Error parsing JSON:', error);
+            }
+        } else {
+            console.warn('Invalid cart reference:', ref);
+        }
     }
-  }, [data])
+}, [loginResponse?.responseBody.cartResponse?.cartReference]);
+
   
   const sum = data?.map((val: OrderProps) => val.price).reduce((acc: number, value: number) => {
     return acc + value
