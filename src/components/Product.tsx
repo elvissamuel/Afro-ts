@@ -46,9 +46,7 @@ const Product = (props: Props) => {
     const res = localStorage.getItem('Afro_Login_Response') ?? ''
     const loginResponse = JSON.parse(res)
     setLoginResponse(loginResponse)
-    const myCartRef = localStorage.getItem('Afro_Cart_Reference') ?? '';
-    const cartRef = JSON.parse(myCartRef);
-    setCartRef(cartRef)
+    
     }
   }, [])
 
@@ -72,8 +70,11 @@ const handleAddProduct = async (): Promise<void> => {
               const encryptedInfo = encryptData({data, secretKey: process.env.NEXT_PUBLIC_AFROMARKETS_SECRET_KEY});
               return createCart({encryptedInfo, setLoading, toast, setCount});
           } else {
+              const myCartRef = localStorage.getItem('Afro_Cart_Reference') ?? '';
+              // const cartRef = JSON.parse(myCartRef);
+              setCartRef(cartRef)
               
-              const data = {authorization: dataAuth, ip_address: dataIP, cart_reference: cartRef, product_id: props.product.productId, quantity: count};
+              const data = {authorization: dataAuth, ip_address: dataIP, cart_reference: myCartRef, product_id: props.product.productId, quantity: count};
               console.log('Sent data: ', data);
               const encryptedInfo = encryptData({data, secretKey: process.env.NEXT_PUBLIC_AFROMARKETS_SECRET_KEY});
               return addToCart({encryptedInfo, setLoading, toast, setCount});
