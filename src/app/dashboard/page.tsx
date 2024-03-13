@@ -95,11 +95,13 @@ const Dashboard = (props: Props) => {
   
   })
 
-  // useEffect(() => {
-  //     refetch();
-  //     console.log('Refetch triggered');
+  useEffect(() => {
+    if(searchValue !== ''){
+      refetch();
+      console.log('Refetch triggered');
+    }
     
-  // }, [searchValue, refetch]);
+  }, [searchValue, refetch]);
 
   if(!contextValues){
     return null;

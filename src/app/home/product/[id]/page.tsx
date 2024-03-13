@@ -14,6 +14,7 @@ import { useParams } from 'next/navigation'
 import Image from 'next/image'
 import { DataSentProp } from '../../page'
 import { TailSpin } from 'react-loader-spinner'
+import BreadCrumbs from '@/components/BreadCrumbs'
 
 // type Props = {
 //   product: productProps
@@ -98,8 +99,9 @@ const ProductDetails = () => {
     
      <HomeNav />
         <Toaster richColors position='top-center' />
+        <div className='w-full fixed'><BreadCrumbs title="Product" /> </div>
         {allprod ? 
-        <div key={allprod[0].productId} className='w-full xl:w-[85%] mx-auto my-6'>
+        <div key={allprod[0].productId} className='w-full xl:w-[85%] mx-auto mt-16 my-6'>
         <div className='flex flex-col lg:flex-row lg:justify-around gap-8 lg:items-center px-8'>
             <div className='w-full  xl:w-1/2'>
                 <div className='md:w-[90%] md:h-[90%] mx-auto xl:w-[450px] xl:h-[450px] shadow-md p-24'>
@@ -129,10 +131,10 @@ const ProductDetails = () => {
             </div>
         </div>
 
-        <div className='w-[95%] mx-auto shadow-lg rounded-xl p-8 '>
+        {/* <div className='w-[95%] mx-auto shadow-lg rounded-xl p-8 '>
             <h2 className='text-primaryColor font-bold mb-3'>Description</h2>
             <p className='text-sm '>Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis voluptates doloribus voluptatem unde iusto qui. Ea quos repudiandae consectetur asperiores dolorem temporibus tenetur obcaecati esse? <br /> Rem quos eius magni ut corrupti atque, modi sint rerum animi dolorum dolor inventore accusamus molestiae, sequi illo? Tempora quibusdam quaerat modi porro aut necessitatibus?</p>
-        </div>
+        </div> */}
 
         <div className='my-16 w-[95%] mx-auto'>
             <h2 className='text-primaryColor text-lg font-semibold mb-6'>Customer Review</h2>

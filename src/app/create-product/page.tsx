@@ -11,6 +11,7 @@ import { LoginContext } from '@/contexts/LoginContext';
 import DashBoardNav from '@/components/DashboardNav';
 import Image from 'next/image';
 import { LoginResponseProps } from '@/models/models';
+import BreadCrumbs from '@/components/BreadCrumbs';
 
 type Props = {}
 
@@ -24,13 +25,18 @@ const CeateProduct = (props: Props) => {
     const [productPrice, setProductPrice] = useState(0)
     const [productDescription, setProductDescription] = useState('')
     const [loginResponse, setLoginResponse] = useState<LoginResponseProps>()
+    const [isBusiness, setIsBusiness] = useState(false)
+    const [accessToken, setAccessToken] = useState()
     const contextValues = useContext(LoginContext)
-    const isBusiness = loginResponse?.responseBody.isBusiness
     const dataAuth = loginResponse?.responseBody.authorizaiton
     useEffect(()=>{
       if (typeof window !== 'undefined') {
         const res = localStorage.getItem('Afro_Login_Response') ?? ''
         const loginResponse = JSON.parse(res)
+        const myAuth = localStorage.getItem('My_Login_Auth') ?? ''
+        setAccessToken(JSON.parse(myAuth))
+        const isBusiness = loginResponse?.responseBody.isBusiness
+        setIsBusiness(isBusiness)
         setLoginResponse(loginResponse)
         }
     }, [])
@@ -42,7 +48,7 @@ const CeateProduct = (props: Props) => {
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>)=>{
         e.preventDefault()
         const fee_bearer = isBusiness ? 'business' : 'customer'
-        const data = {product_name: productName, product_description: productDescription, product_category: productCategory, product_fee_bearer: fee_bearer, product_image: imgUrl, product_price: productPrice, product_quantity: productQuantity, authorization: dataAuth}
+        const data = {product_name: productName, product_description: productDescription, product_category: productCategory, product_fee_bearer: fee_bearer, product_image: imgUrl, product_price: productPrice, product_quantity: productQuantity, authorization: accessToken}
         console.log('new product sent: ', data)
         const encryptedInfo = encryptData({data, secretKey: process.env.NEXT_PUBLIC_AFROMARKETS_SECRET_KEY})
         console.log('encry: ',encryptedInfo)
@@ -79,6 +85,7 @@ const CeateProduct = (props: Props) => {
   return (
     <div>
         <DashBoardNav />
+        <BreadCrumbs title='Create Product' />
         <Toaster richColors position='top-right' closeButton />
         <div className='max-w-[680px] mx-auto my-2 shadow-lg px-10 py-5'>
             <h2 className='font-semibold text-lg text-primaryColor'>PRODUCT DETAILS</h2>
@@ -104,7 +111,7 @@ const CeateProduct = (props: Props) => {
                             <div className='w-full h-full'>
                                 {loading ? <div className='w-full h-full text-black flex justify-center items-center'>              
                                 <FadeLoader height={10} width={2} color="#01974B" loading={true} />
-                                </div> : <Image className='object-cover w-full h-full' src={imgUrl} alt="product-img" />}
+                                </div> : <Image className='object-cover w-full h-full' src={imgUrl} alt="product-img" width={100} height={100} />}
                             </div>}
                         <input type="file" className='hidden' name="" id="" ref={inputRef} onChange={handleFileChange} />
                     </div>
@@ -118,12 +125,12 @@ const CeateProduct = (props: Props) => {
                             £
                             </span>
                             <label htmlFor="productprice">Price</label>
-                            <input onChange={(e)=>setProductPrice(parseFloat(e.target.value))} value={productPrice.toString()} type="text" className='px-2 pl-8 py-1.5 outline-none rounded-lg bg-secondaryColor' id='productprice' />
+                            <input onChange={(e)=>setProductPrice(parseFloat(e.target.value))} value={productPrice} type="number" className='px-2 pl-8 py-1.5 outline-none rounded-lg bg-secondaryColor' id='productprice' />
                             {/* {errors.product_price && <span className='text-xs text-right'>This field is required</span>} */}
                         </div>
                         <div className='flex flex-col gap-1'>
                             <label htmlFor="quantity">Quantity Available</label>
-                            <input onChange={(e)=>setProductQuantity(parseFloat(e.target.value))} value={productQuantity.toString()} type="text" className='px-2 py-1.5 outline-none rounded-lg bg-secondaryColor' id='quantity' />
+                            <input onChange={(e)=>setProductQuantity(parseFloat(e.target.value))} value={productQuantity} type="number" className='px-2 py-1.5 outline-none rounded-lg bg-secondaryColor' id='quantity' />
                             {/* {errors.product_quantity && <span className='text-xs text-right'>This field is required</span>} */}
                         </div>
                     </div>

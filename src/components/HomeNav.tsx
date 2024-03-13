@@ -103,21 +103,18 @@ const HomeNav = (props: Props) => {
                             <div className="grid grid-cols-1 gap-x-2 gap-y-1 p-4 lg:grid-cols-2">
                               {categories && categories.map((item) => (
                                 <div key={item.name} onClick={()=>{if(props.setSearchValue !== undefined) props.setSearchValue(item.name)}} className="group relative flex gap-x-6 rounded-lg p-4 hover:bg-gray-50 cursor-pointer">
-                                  <div className="mt-1 flex h-11 w-11 flex-none items-center justify-centser rounded-lg bg-gray-50 group-hover:bg-white">
-                                  </div>
+                                  
                                   <div>
                                     <div className="font-semibold text-gray-900">
                                       {item.name}
                                       <span className="absolute inset-0" />
                                     </div>
-                                    {/* <p className="mt-1 text-gray-600">{item.description}</p> */}
                                   </div>
                                   
                                 </div>
                                 
                               ))}
-                                  <p className='text-zinc-700 pl-4 font-semibold cursor-pointer' onClick={()=>{if(props.setSearchValue !== undefined) props.setSearchValue('')}}>View All</p>
-
+                              <p className='text-zinc-700 pl-4 font-semibold cursor-pointer' onClick={()=>{if(props.setSearchValue !== undefined) props.setSearchValue('')}}>View All</p>
                             </div>
                           </div>
                         </Popover.Panel>
@@ -227,9 +224,7 @@ const HomeNav = (props: Props) => {
                             <div className="grid grid-cols-1 gap-x-2 gap-y-1 p-4 lg:grid-cols-2">
                               {categories && categories.map((item) => (
                                 <div key={item.name} className="group relative flex gap-x-6 rounded-lg p-4 hover:bg-gray-50">
-                                  <div className="mt-1 flex h-11 w-11 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white">
-                                    
-                                  </div>
+                                
                                   <div>
                                     <div className="font-semibold text-gray-900">
                                       {item.name}
@@ -238,6 +233,7 @@ const HomeNav = (props: Props) => {
                                   </div>
                                 </div>
                               ))}
+                              <p className='text-zinc-700 pl-4 font-semibold cursor-pointer' onClick={()=>{if(props.setSearchValue !== undefined) props.setSearchValue('')}}>View All</p>
                             </div>
                             
                           </div>

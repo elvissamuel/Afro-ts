@@ -152,17 +152,17 @@ const DashboardNav = (props: Props) => {
                           <div className="w-screen max-w-md flex-auto overflow-hidden rounded-3xl bg-white text-sm leading-6 shadow-lg ring-1 ring-gray-900/5 lg:max-w-3xl">
                             <div className="grid grid-cols-1 gap-x-2 gap-y-1 p-4 lg:grid-cols-2">
                               {categories && categories.map((item) => (
-                                <div key={item.name} className="group relative cursor-pointer flex gap-x-6 rounded-lg p-4 hover:bg-gray-50">
-                                  <div className="mt-1 flex h-11 w-11 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white">
-                                  </div>
-                                  <div>
-                                    <a href='#' className="font-semibold text-gray-900">
+                                <div key={item.name} onClick={()=>{if(props.setSearchValue !== undefined) props.setSearchValue(item.name)}} className="group relative cursor-pointer flex gap-x-6 rounded-lg p-4 hover:bg-gray-50">
+                                  {/* <div className="mt-1 flex h-11 w-11 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white">
+                                  </div> */}
+                                  <div className="font-semibold text-gray-900">
                                       {item.name}
                                       <span className="absolute inset-0" />
-                                    </a>
                                   </div>
                                 </div>
                               ))}
+                                  {// @ts-ignore 
+                                  <p className='text-zinc-700 pl-4 font-semibold cursor-pointer' onClick={()=>{if(props.setSearchValue !== undefined) props.setSearchValue(null)}}>View All</p>}
                             </div>
                           </div>
                         </Popover.Panel>
@@ -387,18 +387,15 @@ const DashboardNav = (props: Props) => {
                           <div className="w-screen max-w-md flex-auto overflow-hidden rounded-3xl bg-white text-sm leading-6 shadow-lg ring-1 ring-gray-900/5 lg:max-w-3xl">
                             <div className="grid grid-cols-1 gap-x-2 gap-y-1 p-4 lg:grid-cols-2">
                               {categories && categories.map((item) => (
-                                <div key={item.name} className="group relative flex gap-x-6 rounded-lg p-4 hover:bg-gray-50">
-                                  <div className="mt-1 flex h-11 w-11 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white">
-                                    
-                                  </div>
-                                  <div>
-                                    <a href="#" className="font-semibold text-gray-900">
+                                <div key={item.name} onClick={()=>{if(props.setSearchValue !== undefined) props.setSearchValue(item.name)}} className="group relative flex gap-x-6 rounded-lg p-4 hover:bg-gray-50">
+                                  
+                                  <div className="font-semibold text-gray-900">
                                       {item.name}
                                       <span className="absolute inset-0" />
-                                    </a>
                                   </div>
                                 </div>
                               ))}
+                              <p className='text-zinc-700 pl-4 font-semibold cursor-pointer' onClick={()=>{if(props.setSearchValue !== undefined) props.setSearchValue('')}}>View All</p>
                             </div>
                             
                           </div>

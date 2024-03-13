@@ -15,6 +15,7 @@ import { useParams, usePathname } from 'next/navigation'
 import Image from 'next/image'
 import { DataSentProp } from '@/app/home/page'
 import { TailSpin } from 'react-loader-spinner'
+import BreadCrumbs from '@/components/BreadCrumbs'
 
 type Props = {
   // product: productProps
@@ -150,6 +151,7 @@ const Product = (props: Props) => {
     return (
     <>
       <DashBoardNav />
+     <BreadCrumbs title='Product' />
         <Toaster richColors position='top-center' />
         {allprod ? 
         <div key={allprod[0].productId} className='w-full xl:w-[85%] mx-auto my-6'>
@@ -182,10 +184,10 @@ const Product = (props: Props) => {
             </div>
         </div>
 
-        <div className='w-[95%] mx-auto shadow-lg rounded-xl p-8 '>
+        {/* <div className='w-[95%] mx-auto shadow-lg rounded-xl p-8 '>
             <h2 className='text-primaryColor font-bold mb-3'>Description</h2>
             <p className='text-sm '>Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis voluptates doloribus voluptatem unde iusto qui. Ea quos repudiandae consectetur asperiores dolorem temporibus tenetur obcaecati esse? <br /> Rem quos eius magni ut corrupti atque, modi sint rerum animi dolorum dolor inventore accusamus molestiae, sequi illo? Tempora quibusdam quaerat modi porro aut necessitatibus?</p>
-        </div>
+        </div> */}
 
         <div className='my-16 w-[95%] mx-auto'>
             <h2 className='text-primaryColor text-lg font-semibold mb-6'>Customer Review</h2>
