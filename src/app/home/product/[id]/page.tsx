@@ -116,7 +116,7 @@ const ProductDetails = () => {
                     <span className='text-xs text-primaryColor font-semibold'>(100 rating)</span>
                 </div>
                 <div className='shadow-md rounded-xl p-3 my-4 '>
-                    <h2 className='font-semibold text-primaryColor'>Description({allprod[0].category})</h2>
+                    <h2 className='font-semibold text-primaryColor'>{allprod[0].category}</h2>
                     <span className='text-sm'>{allprod[0].description}</span>
                 </div>
                 <div className='flex items-center my-2 justify-between gap-2 w-[415px] pr-6'>

@@ -30,8 +30,6 @@ const HomeNav = (props: Props) => {
   const [openCart, setOpenCart] = useState(false)
   const [categories, setCategories] = useState<CategoryProps[]>([])
   const [dataIP, setDataIP] = useState()
-  // const res = localStorage.getItem('Afro_Login_Response') ?? ''
-  // const loginResponse = JSON.parse(res)
 
   useEffect(() => {
     fetch("https://api64.ipify.org?format=json")
@@ -44,18 +42,7 @@ const HomeNav = (props: Props) => {
         console.error("Error fetching IP:", error);
       });
   }, []);
-
-    // const dataAuth = loginResponse?.responseBody.authorization
-    // const cartReference = localStorage.getItem('Afro_Cart_Reference') ?? ''
-    // const cartRef = JSON.parse(cartReference)
-    // const dataIP = window.localStorage.getItem('ip_address') ?? ''
-    // const mydata = {authorization: dataAuth, ip_address: dataIP, cart_reference: cartRef}
-    // const encryptedData = encryptData({data: mydata, secretKey: process.env.NEXT_PUBLIC_AFROMARKETS_SECRET_KEY})
     
-
-    useEffect(()=> {
-      
-    }, [])
 
     useEffect(()=>{
       getCategories(setCategories)
@@ -115,20 +102,22 @@ const HomeNav = (props: Props) => {
                           <div className="w-screen max-w-md flex-auto overflow-hidden rounded-3xl bg-white text-sm leading-6 shadow-lg ring-1 ring-gray-900/5 lg:max-w-3xl">
                             <div className="grid grid-cols-1 gap-x-2 gap-y-1 p-4 lg:grid-cols-2">
                               {categories && categories.map((item) => (
-                                <div key={item.name} onClick={()=>{if(props.setSearchValue !== undefined) props.setSearchValue(item.name)}} className="group relative flex gap-x-6 rounded-lg p-4 hover:bg-gray-50">
-                                  <div className="mt-1 flex h-11 w-11 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white">
-                                    {/* <item.icon className="h-6 w-6 text-gray-600 group-hover:text-indigo-600" aria-hidden="true" /> */}
-                                    <Image src='#' alt="" width={100} height={100} />
+                                <div key={item.name} onClick={()=>{if(props.setSearchValue !== undefined) props.setSearchValue(item.name)}} className="group relative flex gap-x-6 rounded-lg p-4 hover:bg-gray-50 cursor-pointer">
+                                  <div className="mt-1 flex h-11 w-11 flex-none items-center justify-centser rounded-lg bg-gray-50 group-hover:bg-white">
                                   </div>
                                   <div>
-                                    <Link href="#" className="font-semibold text-gray-900">
+                                    <div className="font-semibold text-gray-900">
                                       {item.name}
                                       <span className="absolute inset-0" />
-                                    </Link>
+                                    </div>
                                     {/* <p className="mt-1 text-gray-600">{item.description}</p> */}
                                   </div>
+                                  
                                 </div>
+                                
                               ))}
+                                  <p className='text-zinc-700 pl-4 font-semibold cursor-pointer' onClick={()=>{if(props.setSearchValue !== undefined) props.setSearchValue('')}}>View All</p>
+
                             </div>
                           </div>
                         </Popover.Panel>
@@ -240,14 +229,12 @@ const HomeNav = (props: Props) => {
                                 <div key={item.name} className="group relative flex gap-x-6 rounded-lg p-4 hover:bg-gray-50">
                                   <div className="mt-1 flex h-11 w-11 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white">
                                     
-                                    {/* <img src={item.icon} alt="" /> */}
                                   </div>
                                   <div>
-                                    <Link href="#" className="font-semibold text-gray-900">
+                                    <div className="font-semibold text-gray-900">
                                       {item.name}
                                       <span className="absolute inset-0" />
-                                    </Link>
-                                    {/* <p className="mt-1 text-gray-600">{item.description}</p> */}
+                                    </div>
                                   </div>
                                 </div>
                               ))}
@@ -286,8 +273,6 @@ const HomeNav = (props: Props) => {
                   </span>
                 </div>
                 <div className="ml-3">
-                  {/* <div className="text-sm font-medium text-primaryColor">{afroUsername}</div> */}
-                  {/* <div className="text-sm font-medium text-primaryColor">{afroUserEmail}</div> */}
                 </div>
                 <button
                   type="button"
@@ -295,7 +280,6 @@ const HomeNav = (props: Props) => {
                 >
                   <span className="absolute -inset-1.5" />
                   <span className="sr-only">View cart</span>
-                  {/* <BellIcon className="h-6 w-6" aria-hidden="true" /> */}
                   <span>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6 text-primaryColor hover:text-primaryColorVar">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />

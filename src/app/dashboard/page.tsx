@@ -114,14 +114,16 @@ const Dashboard = (props: Props) => {
           width={50} 
         />
     </div>
-  } else if(dataAuth === ''){
-    return(
-      <div className='mx-auto mt-32 text-center'>
-        <p>You have to login first to view this page</p>
-        <button onClick={()=>router.push('/login')} className='border py-1 my-3 block w-32 mx-auto bg-primaryColor hover:bg-primaryColorVar text-white'>Login</button>
-      </div>
-    )
-  }else return (
+  }
+  //  else if(dataAuth === ''){
+  //   return(
+  //     <div className='mx-auto mt-32 text-center'>
+  //       <p>You have to login first to view this page</p>
+  //       <button onClick={()=>router.push('/login')} className='border py-1 my-3 block w-32 mx-auto bg-primaryColor hover:bg-primaryColorVar text-white'>Login</button>
+  //     </div>
+  //   )
+  // }
+  else return (
     <div className='font-lato'>
       <Toaster richColors position='top-right' closeButton />
       <DashBoardNav setSearchValue={setSearchValue} />
