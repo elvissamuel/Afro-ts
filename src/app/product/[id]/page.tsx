@@ -149,13 +149,13 @@ const Product = (props: Props) => {
     const {count, setCount, setButtonClick, setProducts, products} = contextValues
 
     return (
-    <>
+    <div className='overflow-x-hidden'>
       <DashBoardNav />
      <BreadCrumbs title='Product' />
         <Toaster richColors position='top-center' />
         {allprod ? 
         <div key={allprod[0].productId} className='w-full xl:w-[85%] mx-auto my-6'>
-        <div className='flex flex-col lg:flex-row lg:justify-around gap-8 lg:items-center px-8'>
+        <div className='flex flex-col lg:flex-row lg:justify-around gap-8 lg:items-center px-8 mx-auto'>
             <div className='w-full  xl:w-1/2'>
                 <div className='md:w-[90%] md:h-[90%] mx-auto xl:w-[450px] xl:h-[450px] shadow-md p-24'>
                     <Image className='w-full h-full' src={allprod[0].imageUrl} alt="prod-img" width={100} height={100} />
@@ -174,9 +174,9 @@ const Product = (props: Props) => {
                     <h2 className='font-semibold text-primaryColor'>Description({allprod[0].category})</h2>
                     <span className='text-sm'>{allprod[0].description}</span>
                 </div>
-                <div className='flex items-center my-2 justify-between gap-2 w-[415px] pr-6'>
+                <div className='flex items-center my-2 justify-between gap-2  md:w-[415px] pr-6'>
                     
-                     <button onClick={()=>{addProduct(); setButtonClick(prev => !prev)}} className='w-[251px] bg-secondaryColor font-semibold text-primaryColor rounded-lg h-[40px]'>Add to Cart</button> 
+                     <button onClick={()=>{addProduct(); setButtonClick(prev => !prev)}} className='w-[230px] bg-secondaryColor font-semibold text-primaryColor rounded-lg h-[40px]'>Add to Cart</button> 
                      
                     <Counter />
                 </div>
@@ -278,7 +278,7 @@ const Product = (props: Props) => {
             />
         </div>
         }
-    </>
+    </div>
   ) 
 
   }

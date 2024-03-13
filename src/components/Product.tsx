@@ -109,7 +109,7 @@ const handleAddProduct = async (): Promise<void> => {
       const {count, setCount} = contextValues
 
   return (
-    <div key={props.product.productId} className='w-[200px]'>
+    <div key={props.product.productId} className='w-full md:w-[200px]'>
       <Link href={`product/${props.product.productId}`}>
         <div className='h-[180px] w-full relative my-2'>
           <Image className='object-contain w-full h-full border rounded-lg p-3 shadow-md' src={props.product.imageUrl} width={100} height={100} alt="" />

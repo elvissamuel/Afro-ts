@@ -132,7 +132,7 @@ const Dashboard = (props: Props) => {
       {/* <ProductDetails /> */}
       <DashboardBanner />
       
-      <div className='grid gap-1 grid-cols-2 lg:grid-cols-4 w-[90%] mx-auto '>
+      <div className='grid gap-1 md:grid-cols-2 lg:grid-cols-4 w-[90%] mx-auto '>
         {products?.map((product, index)=>(
           <div key={index} className='cursor-pointer my-6 flex items-center justify-center'>
             <Product product={product} />

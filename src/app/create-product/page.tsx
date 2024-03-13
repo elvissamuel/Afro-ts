@@ -92,7 +92,7 @@ const CeateProduct = (props: Props) => {
             <p className='text-sm text-primaryColor'>Kindly fill in product details</p>
 
             <form onSubmit={(e)=>handleSubmit(e)} className='mt-8 flex flex-col gap-3'>
-                <div className='flex gap-10'>
+                <div className='flex flex-col md:flex-row gap-y-6 gap-10'>
                     <div className='bg-secondaryColor shrink-0 h-[200px] w-[150px] rounded-lg flex justify-center items-center'>
                         {imgFIle == null && imgUrl == '' ? 
                             <div className='flex flex-col items-center gap-1'>
@@ -115,7 +115,7 @@ const CeateProduct = (props: Props) => {
                             </div>}
                         <input type="file" className='hidden' name="" id="" ref={inputRef} onChange={handleFileChange} />
                     </div>
-                    <div className='w-full text-sm text-primaryColor font-semibold flex flex-col justify-evenly'>
+                    <div className='w-full text-sm text-primaryColor font-semibold flex flex-col gap-2 justify-evenly'>
                         <div className='flex flex-col gap-1'>
                             <label htmlFor="productname">Product Name</label>
                             <input onChange={(e)=>setProductName(e.target.value)} value={productName} type="text" className='px-2 w-full py-1.5 outline-none rounded-lg bg-secondaryColor' id='productname' />

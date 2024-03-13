@@ -209,9 +209,9 @@ const DashboardNav = (props: Props) => {
                   <span className="absolute -inset-0.5" />
                   <span className="sr-only">Open main menu</span>
                   {open ? (
-                    <XMarkIcon className="block bg-primaryColor h-6 w-6" aria-hidden="true" />
+                    <XMarkIcon color='white' className="block h-6 w-6" aria-hidden="true" />
                   ) : (
-                    <Bars3Icon className="block bg-primaryColor h-6 w-6" aria-hidden="true" />
+                    <Bars3Icon color='white' className="block h-6 w-6" aria-hidden="true" />
                   )}
                 </Disclosure.Button>
               </div>
@@ -470,6 +470,20 @@ const DashboardNav = (props: Props) => {
                 >
                   Saved Items
                 </Disclosure.Button>
+               {isBusiness && <Disclosure.Button>
+                            <button
+                              onClick={()=>router.push('/create-product')}
+                              className={
+                                ' px-2 py-1 mb-1 hover:bg-secondaryColor text-sm flex items-center text-primaryColor border border-primaryColor text-center mx-auto gap-2 rounded-lg'
+                              }
+                            >
+                              <span className=''><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-3 h-3 text-primaryColor">
+                                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                </svg>
+                              </span>
+                              <span className='text-sm'>Add Product</span>
+                            </button>
+                </Disclosure.Button>}
                 <Disclosure.Button
                   as="a"
                   href="#"

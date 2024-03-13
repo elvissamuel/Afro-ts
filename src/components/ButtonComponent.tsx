@@ -8,7 +8,7 @@ type Props = {
 const ButtonComponent = (props: Props) => {
   return (
     <div>
-      <button onClick={()=>props.handleClick()} className={`my-1 bg-primaryColor hover:bg-primaryColorVar text-white h-[40px] w-[415px] text-center rounded-lg`}>{props.title}</button>
+      <button onClick={()=>props.handleClick()} className={`my-1 bg-primaryColor hover:bg-primaryColorVar text-white h-[40px] w-[80vw] md:w-[415px] text-center rounded-lg`}>{props.title}</button>
     </div>
   )
 }

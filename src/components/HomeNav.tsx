@@ -307,11 +307,12 @@ const HomeNav = (props: Props) => {
                 </Disclosure.Button>
                 <Disclosure.Button
                   as="a"
-                  href="#"
-                  className="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-primaryColorVar hover:text-white"
-                  onClick={()=>handleLogout()}
+                  href="/login"
+                  className="text-primaryColor text-base p-1 font-semibold block w-[200px] mx-auto text-center rounded px-2 py-2 bg-secondaryColor"
                 >
-                  Sign out
+                  Login
+
+                  {/* <div className='text-primaryColor text-sm p-1 font-semibold flex-shrink-0 '><Link href={'/login'}><button className='rounded px-2 py-1 bg-secondaryColor'>Login</button></Link></div> */}
                 </Disclosure.Button>
               </div>
             </div>
