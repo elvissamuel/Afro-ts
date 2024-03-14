@@ -201,7 +201,7 @@ const ProductDetails = () => {
                             <button className='bg-primaryColor text-white text-sm font-semibold py-2 px-4 rounded-md' type="submit">Submit</button>
                         </form>
                 </div>
-                <div>
+                {/* <div>
                     <p className='text-primaryColor font-semibold'>0 Reviews</p>
                     <div className='border border-primaryColor border-opacity-40 shadow-lg rounded-lg p-4 my-8'>
                         <div className='flex justify-between items-center text-sm font-semibold'>
@@ -212,7 +212,7 @@ const ProductDetails = () => {
 
                         <span className='my-4 text-sm block'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quos quas similique saepe, illo eaque asperiores repellendus possimus minima autem accusantium quibusdam repellat velit natus! Tenetur assumenda recusandae facilis eos sunt!</span>
                     </div>
-                </div>
+                </div> */}
             </div>
         </div>
         </div> 

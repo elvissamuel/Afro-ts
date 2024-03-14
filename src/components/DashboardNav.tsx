@@ -334,7 +334,7 @@ const DashboardNav = (props: Props) => {
                                   <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                                 </svg>
                               </span>
-                              <span>Add Product</span>
+                              <span>Create Product</span>
                             </button>
                           )}
                         </Menu.Item>}
@@ -385,7 +385,7 @@ const DashboardNav = (props: Props) => {
                       >
                         <Popover.Panel className="absolute -left-10 z-10 mt-5 flex w-screen max-w-max  px-4">
                           <div className="w-screen max-w-md flex-auto overflow-hidden rounded-3xl bg-white text-sm leading-6 shadow-lg ring-1 ring-gray-900/5 lg:max-w-3xl">
-                            <div className="grid grid-cols-1 gap-x-2 gap-y-1 p-4 lg:grid-cols-2">
+                            <div className="grid grid-cols-1 gap-x-2 gap-y-1 p-4 lg:grid-cols-2 z-50">
                               {categories && categories.map((item) => (
                                 <div key={item.name} onClick={()=>{if(props.setSearchValue !== undefined) props.setSearchValue(item.name)}} className="group relative flex gap-x-6 rounded-lg p-4 hover:bg-gray-50">
                                   
@@ -420,33 +420,41 @@ const DashboardNav = (props: Props) => {
               
             </div>
             <div className="border-t border-gray-700 pb-3 pt-4">
-              <div className="flex items-center px-5">
-                <div className="flex-shrink-0">
+              <div className="flex items-center justify-between px-5">
+                <div className="flex-shrink-0 flex items-start">
+                  <div >
                   
-                  <span>
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-8 h-8 text-primaryColor">
-                    <path fill-rule="evenodd" d="M18 10a8 8 0 1 1-16 0 8 8 0 0 1 16 0Zm-5.5-2.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0ZM10 12a5.99 5.99 0 0 0-4.793 2.39A6.483 6.483 0 0 0 10 16.5a6.483 6.483 0 0 0 4.793-2.11A5.99 5.99 0 0 0 10 12Z" clip-rule="evenodd" />
-                  </svg>
-
-                  </span>
-                </div>
-                <div className="ml-3">
-                  <div className="text-sm font-medium text-primaryColor">{afroUsername}</div>
-                  <div className="text-sm font-medium text-primaryColor">{afroUserEmail}</div>
-                </div>
-                <button
-                  type="button"
-                  className="relative ml-auto flex-shrink-0 rounded-full p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
-                >
-                  <span className="absolute -inset-1.5" />
-                  <span className="sr-only">View cart</span>
-                  {/* <BellIcon className="h-6 w-6" aria-hidden="true" /> */}
-                  <span>
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6 text-primaryColor hover:text-primaryColorVar">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
+                    <span>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-8 h-8 text-primaryColor">
+                      <path fill-rule="evenodd" d="M18 10a8 8 0 1 1-16 0 8 8 0 0 1 16 0Zm-5.5-2.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0ZM10 12a5.99 5.99 0 0 0-4.793 2.39A6.483 6.483 0 0 0 10 16.5a6.483 6.483 0 0 0 4.793-2.11A5.99 5.99 0 0 0 10 12Z" clip-rule="evenodd" />
                     </svg>
                     </span>
-                </button>
+                  </div>
+                  <div className="ml-3">
+                    <div className="text-sm font-medium text-primaryColor">{afroUsername}</div>
+                    <div className="text-sm font-medium text-primaryColor">{afroUserEmail}</div>
+                  </div>
+                </div>
+
+                <button
+                    onClick={()=>setOpenCart(prev => !prev)}
+                    type="button"
+                    className=" relative flex-shrink-0 rounded-full p-1 text-primaryColor font-semibold hover:text-gray-700"
+                  >
+                    <span className="absolute -inset-1.5" />
+                    <span className="sr-only">View cart</span>
+                    {/* <BellIcon className="h-6 w-6" aria-hidden="true" /> */}
+                    {!isBusiness ? <p  className='flex items-center gap-1 flex-row-reverse'> 
+                        {noItem.length !== 0 && <div className='text-[11px] font-semibold absolute -left-2 -top-2 bg-primaryColor text-secondaryColor h-5 w-5 text-center rounded-[50%] flex justify-center items-center'>{allOrder.length}</div>}
+                        <span>
+                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6 font-semibold">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
+                          </svg>
+                        </span>
+                    </p> : null}
+                    {openCart && <ShoppingCart />}
+
+                  </button>
               </div>
               <div className="mt-3 space-y-1 px-2">
                 <Disclosure.Button
@@ -481,7 +489,7 @@ const DashboardNav = (props: Props) => {
                                   <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                                 </svg>
                               </span>
-                              <span className='text-sm'>Add Product</span>
+                              <span className='text-sm'>Create Product</span>
                             </button>
                 </Disclosure.Button>}
                 <Disclosure.Button
