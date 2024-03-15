@@ -176,11 +176,11 @@ const Product = (props: Props) => {
                 </div>
                 <div className='flex items-center my-2 justify-between gap-2  md:w-[415px] pr-6'>
                     
-                     <button onClick={()=>{addProduct(); setButtonClick(prev => !prev)}} className='w-[230px] bg-secondaryColor font-semibold text-primaryColor rounded-lg h-[40px]'>Add to Cart</button> 
+                     <button onClick={()=>console.log('Get wishlist button was clicked')} className='w-[230px] bg-secondaryColor font-semibold text-primaryColor rounded-lg h-[40px]'>Add to wishlist</button> 
                      
                     <Counter />
                 </div>
-                <ButtonComponent handleClick={()=>console.log('Get wishlist button was clicked')} title='Add to wishlist' />
+                <ButtonComponent handleClick={()=>{addProduct(); setButtonClick(prev => !prev)}} title='Add to Cart' />
             </div>
         </div>
 
