@@ -9,7 +9,6 @@ import { addToCart, createCart, getAllItems, getAllOrders, getCategories } from 
 import { Toaster, toast } from 'sonner'
 import { encryptData } from '@/AES/AES'
 import { useQueryClient, useMutation, useQuery } from '@tanstack/react-query';
-import HomeNav from '@/components/HomeNav'
 import { LoginResponseProps, productProps } from '@/models/models'
 import { useParams, usePathname } from 'next/navigation'
 import Image from 'next/image'
@@ -33,6 +32,7 @@ const Product = (props: Props) => {
     const [cart, setCart] = useState()
     const [dataIP, setDataIP] = useState('')
     const [myAuth, setMyAuth] = useState('')
+    const [cartRef, setCartRef] = useState('')
 
 
     // const dataIP = JSON.stringify(localStorage.getItem('ip_address'))
@@ -55,11 +55,13 @@ const Product = (props: Props) => {
         const res = localStorage.getItem('Afro_Login_Response') ?? ''
         const loginResponse = JSON.parse(res)
         setLoginResponse(loginResponse)
-        const cartRe = localStorage.getItem('Afro_Cart') ?? ''
-        const cart = JSON.parse(cartRe)
-        setCart(cart)
+        const cart = localStorage.getItem('Afro_Cart') ?? ''
+        setCart(JSON.parse(cart))
         const myAuth = localStorage.getItem('My_Login_Auth') ?? ''
         setMyAuth(JSON.parse(myAuth))
+        const myCartRef = localStorage.getItem('Afro_Login_Cart_Reference') ?? '' 
+        const ref = myCartRef !== '' ? JSON.parse(myCartRef) : ''
+        setCartRef(ref)
       }
     }, [])
 
@@ -120,8 +122,6 @@ const Product = (props: Props) => {
                   createCart({encryptedInfo, setLoading, toast, setCount})
                   resolve();
               } else if (homeProduct) {
-                  const myCartRef = localStorage.getItem('Afro_Cart_Reference') ?? '' 
-                  const cartRef = JSON.parse(myCartRef)
                   const data = {authorization: myAuth, ip_address: dataIP, cart_reference: cartRef, product_id: homeProduct[0].productId, quantity: count}
                   console.log('Sent data: ', data)
                   const encryptedInfo = encryptData({data, secretKey:process.env.NEXT_PUBLIC_AFROMARKETS_SECRET_KEY})

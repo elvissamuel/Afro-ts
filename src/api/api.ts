@@ -138,6 +138,11 @@ export const handleLogin = (params:FLoginProps) => {
       localStorage.setItem('Afro_Login_Response', JSON.stringify(response))
       localStorage.setItem('Afro_Cart', JSON.stringify(response.responseBody.cartResponse))
       localStorage.setItem('My_Login_Auth', JSON.stringify(response.responseBody.authorization))
+      if(response.responseBody.cartResponse.cartReference){
+        localStorage.setItem("Afro_Login_Cart_Reference", JSON.stringify(response.responseBody.cartResponse.cartReference))
+      }else{
+        localStorage.setItem("Afro_Login_Cart_Reference", JSON.stringify(''))
+      }
       console.log('cart res: ', response.responseBody.cartResponse.orders)
       if (Object.keys(cart).length >= 1){
       localStorage.setItem('Afro_Cart_Orders', JSON.stringify(response.responseBody.cartResponse.orders))
@@ -369,7 +374,9 @@ export const createCart = (params: FCreateCartProps) => {
       const response = JSON.parse(myres!)
       console.log('bus reg: ', response)
       params.setCount(1)
-      localStorage.setItem('Afro_Cart_Reference', JSON.stringify(response.responseBody.cartReference))
+      localStorage.setItem('Afro_Login_Cart_Reference', JSON.stringify(response.responseBody.cartReference))
+      localStorage.setItem('Afro_Cart_CreateRes', JSON.stringify(response.responseBody))
+      localStorage.setItem('Afro_Cart', JSON.stringify(response.responseBody))
       localStorage.setItem('Afro_Item_No', JSON.stringify(response.responseBody.numberOfItems))
       localStorage.setItem('Afro_Cart_Orders', JSON.stringify(response.responseBody.orders))
       if(res.status === 200) {
@@ -404,8 +411,8 @@ export const addToCart = (params: FCreateCartProps) => {
       console.log('bus reg: ', response)
       params.setCount(1)
       localStorage.setItem('Afro_Item_No', JSON.stringify(response.responseBody.numberOfItems))
-      localStorage.setItem('Afro_Cart_Reference', JSON.stringify(response.responseBody.cartReference))
       localStorage.setItem('Afro_Cart_Orders', JSON.stringify(response.responseBody.orders))
+      localStorage.setItem('Afro_Cart_AddRes', JSON.stringify(response.responseBody))
       if(res.status === 200) {
         params.toast.success('Product added to cart successfully', {
           duration: 1000,
@@ -437,6 +444,7 @@ export const removeFromCart = (params: FRemoveFromCartProps) => {
       const response = JSON.parse(myres!)
       console.log('bus reg: ', response)
       localStorage.setItem('Afro_Cart_Orders', JSON.stringify(response.responseBody.orders))
+      localStorage.setItem('Afro_Cart', JSON.stringify(response.responseBody.orders[0]))
       localStorage.setItem('Afro_Item_No', JSON.stringify(response.responseBody.numberOfItems))
       if(res.status === 200) {
         params.toast.success('Product removed successfully', {
@@ -455,6 +463,29 @@ export const removeFromCart = (params: FRemoveFromCartProps) => {
   })
 }
 
+// export const removeFromCart1 = async (params: FRemoveFromCartProps) => {
+//   const headers = {
+//     'auth_param':process.env.NEXT_PUBLIC_AFROMARKETS_AUTH_PARAMS, 
+//     'Content-Type': 'text/plain'
+//   }
+//   params.setLoading(true)
+//   const myRes = await axios.post(process.env.NEXT_PUBLIC_AFROMARKETS_URL + "/cart/removeItemFromCart", params.encryptedInfo, {headers}
+//     )
+//     if(myRes.data){
+//       const myData2 = await decryptAES(myRes.data, process.env.NEXT_PUBLIC_AFROMARKETS_SECRET_KEY)
+//       const response = JSON.parse(myData2!)
+//       console.log('bus reg: ', response)
+//       localStorage.setItem('Afro_Cart_Orders', JSON.stringify(response.responseBody.orders))
+//       localStorage.setItem('Afro_Item_No', JSON.stringify(response.responseBody.numberOfItems))
+//       if(myRes.status === 200) {
+//         params.toast.success('Product removed successfully', {
+//           duration: 1000
+//         })
+//       }
+//     }
+//   }
+
+
 export const getAllOrders = async (data:string) => {
   try {
     const headers = {
@@ -467,8 +498,8 @@ export const getAllOrders = async (data:string) => {
     if (response.data) {
       const myData = await decryptAES(response.data, process.env.NEXT_PUBLIC_AFROMARKETS_SECRET_KEY);
       const parsedData = JSON.parse(myData!);
-      window.localStorage.setItem('My_Afro_Orders', JSON.stringify(parsedData.responseBody))
-      return parsedData.responseBody.orders;
+      window.localStorage.setItem('My_Afro_Orders', JSON.stringify(parsedData))
+      return parsedData.responseBody;
     }
   } catch (error) {
     console.log('Error:', error);

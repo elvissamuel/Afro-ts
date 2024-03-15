@@ -39,6 +39,9 @@ const DashboardNav = (props: Props) => {
   const [cartRef, setCartRef] = useState<string>()
   const [dataIP, setDataIP] = useState<string>()
   const [loginResponse, setLoginResponse] = useState<LoginResponseProps>()
+  const [cartReference, setCartReference] = useState('')
+  const [allItems, setAllItems] = useState([])
+  const [orderMessage, setOrderMessage] = useState('')
 
   useEffect(() => {
     fetch("https://api64.ipify.org?format=json")
@@ -59,6 +62,9 @@ const DashboardNav = (props: Props) => {
         const loginResponseString = localStorage.getItem('Afro_Login_Response') ?? ''
         const loginResponse = JSON.parse(loginResponseString);
         setLoginResponse(loginResponse)
+        const afroCartReference = localStorage.getItem('Afro_Login_Cart_Reference') ?? ''
+        const ref = afroCartReference !== '' ? JSON.parse(afroCartReference) : ''
+        setCartReference(ref)
         }
     }, [])
     const afroUsername =  loginResponse?.responseBody.fullName
@@ -70,20 +76,26 @@ const DashboardNav = (props: Props) => {
     const {data: allOrder, isSuccess, } = useQuery({
       queryKey: ['All_Afro_Orders'],
       queryFn: async ()=>{
-        if(typeof window !== 'undefined' && window.localStorage){
-          const afroCartReference = localStorage.getItem('Afro_Cart_Reference') ?? ''
-          const cartRef = JSON.parse(afroCartReference)
-          setCartRef(cartRef)
-        }
-        const afroCartReference = localStorage.getItem('Afro_Cart_Reference') ?? ''
-        const ref = JSON.parse(afroCartReference)
-        const data = {authorization: userAuth, ip_address: dataIP, cart_reference: ref}
+        // if(typeof window !== 'undefined' && window.localStorage){
+        //   const afroCartReference = localStorage.getItem('Afro_Cart_Reference') ?? ''
+        //   const cartRef = JSON.parse(afroCartReference)
+        //   setCartRef(cartRef)
+        // }
+
+        const data = {authorization: userAuth, ip_address: dataIP, cart_reference: cartReference}
         console.log('This is data for all orders for a user before it is sent: ', data)
         const encryptedData = encryptData({data, secretKey:process.env.NEXT_PUBLIC_AFROMARKETS_SECRET_KEY})
         return getAllOrders(encryptedData)
       },
-      enabled: userAuth !== ''
+      enabled: userAuth !== '' && dataIP !== undefined && cartReference !== ''
     })
+
+    useEffect(()=>{
+      const orders = allOrder !== undefined ? allOrder.orders : []
+      setAllItems(orders)
+      const orderMessage = allOrder !== undefined ? allOrder : ''
+      setOrderMessage(orderMessage)
+    }, [allOrder])
 
     useEffect(() => {
       if (isSuccess) {
@@ -103,6 +115,8 @@ const DashboardNav = (props: Props) => {
     setLogout(true)
     if(typeof window !== 'undefined' && window.localStorage){
     window.localStorage.setItem('My_Login_Auth', '')
+    localStorage.setItem('Afro_Login_Cart_Reference', '')
+    // window.localStorage.setItem('Afro_Cart_Reference', '')
     }
     setTimeout(() => {
       toast.loading("You've logged out successfully")
@@ -226,13 +240,13 @@ const DashboardNav = (props: Props) => {
                     <span className="sr-only">View cart</span>
                     {/* <BellIcon className="h-6 w-6" aria-hidden="true" /> */}
                     {!isBusiness ? <p className='flex items-center gap-1 flex-row-reverse'> 
-                        {noItem.length !== 0 && <div className='text-[11px] font-semibold absolute -left-2 -top-2 bg-primaryColor text-secondaryColor h-5 w-5 text-center rounded-[50%] flex justify-center items-center'>{allOrder.length}</div>}
+                        {allItems !== undefined && <div className='text-[11px] font-semibold absolute -left-2 -top-2 bg-primaryColor text-secondaryColor h-5 w-5 text-center rounded-[50%] flex justify-center items-center'>{allItems.length}</div>}
                         <span className='text-sm font-semibold'>Cart</span>
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6 font-semibold">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
                         </svg>
                     </p> : null}
-                    {openCart && <ShoppingCart />}
+                    {openCart && <ShoppingCart order={allItems} orderMessage={orderMessage} />}
 
                   </button>
 
@@ -445,14 +459,14 @@ const DashboardNav = (props: Props) => {
                     <span className="sr-only">View cart</span>
                     {/* <BellIcon className="h-6 w-6" aria-hidden="true" /> */}
                     {!isBusiness ? <p  className='flex items-center gap-1 flex-row-reverse'> 
-                        {noItem.length !== 0 && <div className='text-[11px] font-semibold absolute -left-2 -top-2 bg-primaryColor text-secondaryColor h-5 w-5 text-center rounded-[50%] flex justify-center items-center'>{allOrder.length}</div>}
+                        {allItems !== undefined && <div className='text-[11px] font-semibold absolute -left-2 -top-2 bg-primaryColor text-secondaryColor h-5 w-5 text-center rounded-[50%] flex justify-center items-center'>{allItems.length}</div>}
                         <span>
                           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6 font-semibold">
                           <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
                           </svg>
                         </span>
                     </p> : null}
-                    {openCart && <ShoppingCart />}
+                    {openCart && <ShoppingCart order={allItems} orderMessage={orderMessage} />}
 
                   </button>
               </div>

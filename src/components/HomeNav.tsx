@@ -49,18 +49,6 @@ const HomeNav = (props: Props) => {
     }, [])
 
 
-  const handleLogout = () => {
-    setLogout(true)
-    if (typeof window !== 'undefined' && window.localStorage){
-    window.localStorage.setItem('My_Login_Auth', '')
-    }
-    setTimeout(() => {
-      toast.loading("You've logged out successfully")
-    }, 500);
-    setTimeout(() => {
-      router.push('/')
-    }, 1500);
-  }
 
   return (
     <Disclosure as="nav" className=" sticky top-0 bg-white z-20 border-b-8 border-secondaryColor">
@@ -169,14 +157,13 @@ const HomeNav = (props: Props) => {
               </div>
               <div className="hidden lg:ml-4 lg:block">
                 <div className="flex items-center gap-2">
-                  <button
+                  {/* <button
                     onClick={()=>setOpenCart(prev => !prev)}
                     type="button"
                     className="z-40 relative flex-shrink-0 rounded-full p-1 text-primaryColor font-semibold hover:text-gray-700"
                   >
                     <span className="absolute -inset-1.5" />
                     <span className="sr-only">View cart</span>
-                    {/* <BellIcon className="h-6 w-6" aria-hidden="true" /> */}
                     <p className='flex items-center gap-1 flex-row-reverse'> 
                         <span className='text-sm font-semibold'>Cart</span>
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6 font-semibold">
@@ -186,7 +173,7 @@ const HomeNav = (props: Props) => {
 
                     {openCart && <ShoppingCart />}
 
-                  </button>
+                  </button> */}
 
                   {/* Profile dropdown */}
                   

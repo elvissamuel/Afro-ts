@@ -5,11 +5,13 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { getAllOrders, removeFromCart, handleCheckout } from '@/api/api'
 import { Toaster, toast } from 'sonner'
 import { encryptData } from '../AES/AES'
-import { useRouter } from 'next/navigation'
-import { LoginResponseBodyProps, LoginResponseProps, OrderProps } from '@/models/models'
+import { LoginResponseProps, OrderProps } from '@/models/models'
 import Image from 'next/image'
 
-type Props = {}
+type Props = {
+  order: OrderProps[]
+  orderMessage: string
+}
 
 const ShoppingCart = (props: Props) => {
   const [open, setOpen] = useState(true)
@@ -18,6 +20,7 @@ const ShoppingCart = (props: Props) => {
   const [dataIP, setDataIP] = useState('')
   const [loginResponse, setLoginResponse] = useState<LoginResponseProps>()
   const [accessToken, setAccessToken] = useState('')
+  const client = useQueryClient()
 
 
   useEffect(() => {
@@ -56,31 +59,31 @@ const ShoppingCart = (props: Props) => {
   
   const encryptedData = encryptData({data: {authorization: accessToken, ip_address: dataIP, cart_reference: cartRef}, secretKey:process.env.NEXT_PUBLIC_AFROMARKETS_SECRET_KEY})
 
-  useEffect(()=>{
-    console.log('This is data sent to get all orders: ', {authorization: accessToken, ip_address: dataIP, cart_reference: cartRef})
-  }, [accessToken, dataIP, cartRef])
+  // useEffect(()=>{
+  //   console.log('This is data sent to get all orders: ', {authorization: accessToken, ip_address: dataIP, cart_reference: cartRef})
+  // }, [accessToken, dataIP, cartRef])
 
 
   const {mutate:handleCartCheckout} = useMutation({
     mutationFn: ()=> handleCheckout({data:encryptedData, setLoading, toast}),
   })
 
-  const {data, isLoading, refetch, isSuccess, isError} = useQuery({
-    queryKey: ['All_Afro_Orders'],
-    queryFn: async ()=>getAllOrders(encryptedData), 
-    enabled: cartRef !== ''
-  })
+  // const {data, isLoading, refetch, isSuccess, isError} = useQuery({
+  //   queryKey: ['All_Afro_Orders'],
+  //   queryFn: async ()=>getAllOrders(encryptedData), 
+  //   enabled: cartRef !== ''
+  // })
 
   useEffect(()=>{
-    if(isSuccess && cartRef !== ''){
-      console.log('This is all order on shopping cart: ', data)
+    if( cartRef !== ''){
+      console.log('This is all order on shopping cart: ', props.order)
     }
-  }, [isSuccess, data, cartRef])
+  }, [props.order, cartRef])
 
   const {mutate: deleteCartItem} = useMutation({
     mutationFn: (id:number) => handleDeleteItem(id),
     // @ts-ignore
-    onSuccess: refetch() 
+    onSuccess: client.invalidateQueries({queryKey: ['All_Afro_Orders']})
   
   })
 
@@ -94,7 +97,7 @@ const ShoppingCart = (props: Props) => {
 
   useEffect(() => {
     if (typeof window !== 'undefined' && window.localStorage) {
-        const cartReference = localStorage.getItem('Afro_Cart_Reference') ?? ''
+        const cartReference = localStorage.getItem('Afro_Login_Cart_Reference') ?? ''
         if (cartReference && typeof cartReference === 'string') {
             try {
                 const parsedRef = JSON.parse(cartReference);
@@ -108,10 +111,12 @@ const ShoppingCart = (props: Props) => {
     }
 }, [loginResponse?.responseBody.cartResponse?.cartReference]);
 
-  
-  const sum = data?.map((val: OrderProps) => val.price).reduce((acc: number, value: number) => {
+  let sum = 0;
+  if(props.order !== undefined){
+    sum = props.order?.map((val: OrderProps) => val.price).reduce((acc: number, value: number) => {
     return acc + value
 }, 0)
+}
   return (
     <Transition.Root show={open} as={Fragment}>
       <Dialog as="div" className="relative z-40" onClose={setOpen}>
@@ -159,9 +164,9 @@ const ShoppingCart = (props: Props) => {
                       </div>
 
                       <div className="mt-8">
-                        {isSuccess ? <div className="flow-root">
+                        {props.order !== undefined && props.order.length !== 0 ? <div className="flow-root">
                           <ul role="list" className="-my-6 divide-y divide-gray-200">
-                            {data?.map((order: OrderProps) => (
+                            {props.order?.map((order: OrderProps) => (
                               <li key={order.productId} className="flex py-6">
                                 <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
                                   <Image
@@ -203,7 +208,7 @@ const ShoppingCart = (props: Props) => {
                       </div>
                     </div>
 
-                    {isSuccess && <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
+                    {props.order !== undefined && <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
                       <div className="flex justify-between text-base font-medium text-gray-900">
                         <p>Subtotal</p>
                         <p>${sum}</p>
